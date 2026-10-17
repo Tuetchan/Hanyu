@@ -1,0 +1,2044 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hanyu Pinyin — Học Phát Âm & Bảng Chữ Cái Tiếng Trung Từ Gốc</title>
+  <style>
+    :root {
+      --bg-page: #eef6ff;
+      --bg-card: #ffffff;
+      --bg-soft: #f0fdfa;
+      --teal-main: #0d9488;
+      --teal-hover: #0f766e;
+      --teal-dark: #115e59;
+      --teal-border: #99f6e4;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --border-light: #dbeafe;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      user-select: none;
+    }
+
+    body {
+      background-color: var(--bg-page);
+      color: var(--text-main);
+      height: 100vh;
+      overflow: hidden;
+      padding: 12px;
+    }
+
+    /* Bố cục 3 cột cố định */
+    .app-layout {
+      display: flex;
+      gap: 14px;
+      height: calc(100vh - 24px);
+      width: 100%;
+      max-width: 1600px;
+      margin: 0 auto;
+    }
+
+    .col-side {
+      width: 25%;
+      min-width: 280px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-light);
+      border-radius: 20px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      box-shadow: 0 4px 15px rgba(13, 148, 136, 0.05);
+    }
+
+    .col-center {
+      flex: 1;
+      background: var(--bg-card);
+      border: 1px solid var(--border-light);
+      border-radius: 20px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      box-shadow: 0 4px 18px rgba(13, 148, 136, 0.06);
+    }
+
+    /* Toàn màn hình khi vào bài học */
+    .app-layout.lesson-fullscreen .col-side {
+      display: none !important;
+    }
+    .app-layout.lesson-fullscreen .col-center {
+      width: 100% !important;
+    }
+
+    /* Cột trái */
+    .left-header {
+      padding: 14px 16px;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .brand-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+    .brand-box {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .brand-logo {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      background: var(--teal-main);
+      color: #fff;
+      font-size: 20px;
+      font-weight: 900;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 3px 0 var(--teal-dark);
+    }
+    .brand-title {
+      font-size: 19px;
+      font-weight: 800;
+      color: var(--text-main);
+      line-height: 1.1;
+    }
+    .brand-sub {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--teal-main);
+      letter-spacing: 0.5px;
+    }
+    .star-counter {
+      background: #fef9c3;
+      border: 1px solid #fde047;
+      color: #854d0e;
+      font-weight: 800;
+      font-size: 13px;
+      padding: 5px 11px;
+      border-radius: 999px;
+    }
+    .sync-btn {
+      width: 100%;
+      padding: 7px 10px;
+      border-radius: 10px;
+      border: 1px solid var(--teal-border);
+      background: var(--bg-soft);
+      color: var(--teal-hover);
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      margin-bottom: 10px;
+    }
+    .sync-btn:hover {
+      background: #ccfbf1;
+    }
+    .script-tabs {
+      display: flex;
+      background: #f1f5f9;
+      padding: 4px;
+      border-radius: 12px;
+      gap: 4px;
+    }
+    .script-tab {
+      flex: 1;
+      border: none;
+      padding: 7px 0;
+      border-radius: 9px;
+      font-size: 12.5px;
+      font-weight: 700;
+      cursor: pointer;
+      background: transparent;
+      color: var(--text-muted);
+    }
+    .script-tab.active {
+      background: var(--teal-main);
+      color: #fff;
+      box-shadow: 0 2px 6px rgba(13, 148, 136, 0.25);
+    }
+
+    .left-body {
+      padding: 12px 14px;
+      overflow-y: auto;
+      flex: 1;
+    }
+    .section-caption {
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--text-main);
+      text-transform: uppercase;
+      margin-bottom: 2px;
+    }
+    .section-desc {
+      font-size: 11.5px;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+    .group-header {
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--teal-hover);
+      margin: 10px 0 6px;
+      padding-bottom: 4px;
+      border-bottom: 1px solid #e2e8f0;
+      text-transform: uppercase;
+    }
+    .alpha-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
+    }
+    .alpha-cell {
+      border: 1.5px solid #e2e8f0;
+      background: #fff;
+      border-radius: 11px;
+      padding: 6px 2px;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color 0.12s, background-color 0.12s;
+    }
+    .alpha-cell:hover {
+      border-color: var(--teal-main);
+      background: var(--bg-soft);
+    }
+    .alpha-cell.active {
+      background: var(--teal-main);
+      border-color: var(--teal-dark);
+      color: #fff;
+    }
+    .alpha-cell .k-char {
+      font-size: 17px;
+      font-weight: 900;
+      line-height: 1.2;
+    }
+    .alpha-cell .k-romaji {
+      font-size: 10px;
+      opacity: 0.8;
+      font-weight: 600;
+    }
+
+    /* Cột phải */
+    .right-wrap {
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      height: 100%;
+      overflow-y: auto;
+    }
+    .result-card {
+      background: #e6f7f5;
+      border: 1.5px solid var(--teal-border);
+      border-radius: 18px;
+      padding: 18px 16px;
+      text-align: center;
+    }
+    .result-label {
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      color: var(--teal-hover);
+      text-transform: uppercase;
+    }
+    .result-kana {
+      font-size: 56px;
+      font-weight: 900;
+      color: var(--text-main);
+      margin: 8px 0 4px;
+      line-height: 1.15;
+    }
+    .result-romaji {
+      font-size: 19px;
+      font-weight: 800;
+      color: var(--teal-dark);
+    }
+    .result-pair {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-top: 4px;
+      font-weight: 700;
+    }
+    .btn-listen {
+      margin-top: 12px;
+      width: 100%;
+      padding: 11px;
+      border: none;
+      border-radius: 12px;
+      background: var(--teal-main);
+      color: #fff;
+      font-size: 14px;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 3px 0 var(--teal-dark);
+    }
+    .btn-listen:hover {
+      background: var(--teal-hover);
+    }
+
+    .note-card {
+      background: #fefce8;
+      border: 1.5px solid #fef08a;
+      border-radius: 18px;
+      padding: 16px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .note-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+    .note-title {
+      font-size: 13.5px;
+      font-weight: 800;
+      color: #713f12;
+    }
+    .note-formula {
+      background: #fde047;
+      color: #713f12;
+      font-size: 11.5px;
+      font-weight: 800;
+      padding: 3px 8px;
+      border-radius: 7px;
+    }
+    .note-body {
+      font-size: 13px;
+      color: #854d0e;
+      line-height: 1.55;
+    }
+    .note-footer {
+      border-top: 1px dashed #fde047;
+      padding-top: 10px;
+      margin-top: 12px;
+      font-size: 12px;
+      color: #713f12;
+    }
+
+    /* Cột giữa: Bản đồ chữ cái */
+    .center-header {
+      padding: 12px 18px;
+      border-bottom: 1px solid #e2e8f0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #fff;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .map-title-badge {
+      background: var(--bg-soft);
+      border: 1.5px solid var(--teal-border);
+      color: var(--teal-dark);
+      font-weight: 800;
+      font-size: 15px;
+      padding: 6px 14px;
+      border-radius: 12px;
+    }
+    .btn-outline {
+      padding: 7px 12px;
+      border-radius: 10px;
+      border: 1.5px solid #cbd5e1;
+      background: #fff;
+      color: var(--text-main);
+      font-size: 12.5px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .btn-outline:hover {
+      border-color: var(--teal-main);
+      color: var(--teal-main);
+    }
+
+    .center-scroll {
+      flex: 1;
+      overflow-y: auto;
+      position: relative;
+      background: linear-gradient(180deg, #f0fdfa 0%, #eef6ff 100%);
+    }
+
+    /* Bản đồ Candy Saga */
+    .saga-container {
+      position: relative;
+      width: 100%;
+      max-width: 520px;
+      margin: 0 auto;
+      padding: 28px 20px 60px;
+    }
+    .stage-banner {
+      text-align: center;
+      margin: 18px 0 14px;
+    }
+    .stage-banner span {
+      display: inline-block;
+      background: #ccfbf1;
+      border: 1.5px solid #5eead4;
+      color: var(--teal-dark);
+      font-weight: 800;
+      font-size: 12.5px;
+      padding: 5px 16px;
+      border-radius: 999px;
+      text-transform: uppercase;
+    }
+    .saga-row {
+      display: flex;
+      position: relative;
+      margin: 22px 0;
+      z-index: 2;
+    }
+    .saga-row.pos-center { justify-content: center; }
+    .saga-row.pos-left { justify-content: flex-start; padding-left: 14%; }
+    .saga-row.pos-right { justify-content: flex-end; padding-right: 14%; }
+
+    .level-node-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      cursor: pointer;
+    }
+    .level-circle {
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 25%, #2dd4bf, #0d9488 65%, #0f766e 100%);
+      border: 4px solid #ffffff;
+      box-shadow: 0 8px 0 #115e59, 0 12px 20px rgba(13, 148, 136, 0.28);
+      color: #ffffff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.12s;
+    }
+    .level-node-wrap:hover .level-circle {
+      transform: translateY(-2px);
+    }
+    .level-circle.locked {
+      background: radial-gradient(circle at 30% 25%, #cbd5e1, #94a3b8 70%, #64748b 100%);
+      box-shadow: 0 8px 0 #475569, 0 10px 15px rgba(15, 23, 42, 0.12);
+      cursor: not-allowed;
+    }
+    .level-num {
+      font-size: 10px;
+      font-weight: 800;
+      opacity: 0.9;
+    }
+    .level-kana {
+      font-size: 22px;
+      font-weight: 900;
+      line-height: 1.15;
+    }
+    .level-sub {
+      font-size: 10px;
+      font-weight: 700;
+      opacity: 0.95;
+      text-align: center;
+      padding: 0 4px;
+    }
+    .level-stars {
+      margin-top: 8px;
+      background: #ffffff;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 999px;
+      padding: 2px 10px;
+      font-size: 14px;
+      letter-spacing: 2px;
+    }
+    .star-on { color: #eab308; }
+    .star-off { color: #cbd5e1; }
+
+    /* Giao diện Toàn màn hình Bài học */
+    .lesson-wrapper {
+      padding: 14px 22px;
+      max-width: 1280px;
+      margin: 0 auto;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 11px;
+    }
+    .star-nav-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .star-tab-btn {
+      padding: 8px 14px;
+      border-radius: 10px;
+      border: 1.5px solid var(--teal-border);
+      background: #fff;
+      color: var(--teal-dark);
+      font-weight: 800;
+      font-size: 13px;
+      cursor: pointer;
+    }
+    .star-tab-btn.active {
+      background: var(--teal-main);
+      border-color: var(--teal-dark);
+      color: #fff;
+    }
+    .star-tab-btn.done-star {
+      background: var(--teal-dark);
+      border-color: #042f2e;
+      color: #fff;
+    }
+
+    .task-banner {
+      background: #f0fdfa;
+      border: 1.5px solid var(--teal-border);
+      border-radius: 14px;
+      padding: 9px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .task-banner-title {
+      font-size: 13.5px;
+      font-weight: 800;
+      color: var(--teal-dark);
+    }
+    .task-banner-sub {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+    .badge-progress {
+      background: #fff;
+      border: 1.5px solid var(--teal-border);
+      color: var(--teal-dark);
+      padding: 4px 12px;
+      border-radius: 999px;
+      font-weight: 800;
+      font-size: 13px;
+    }
+
+    .prompt-box {
+      background: #f0fdfa;
+      border: 2px solid #2dd4bf;
+      border-radius: 16px;
+      padding: 12px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 14px;
+    }
+
+    .slots-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .answer-slot {
+      min-width: 68px;
+      height: 54px;
+      padding: 0 14px;
+      border-radius: 13px;
+      border: 2px dashed #2dd4bf;
+      background: #ffffff;
+      font-size: 20px;
+      font-weight: 900;
+      color: #94a3b8;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .answer-slot.filled {
+      border-style: solid;
+      border-color: var(--teal-dark);
+      background: var(--teal-main);
+      color: #ffffff;
+    }
+    .answer-slot.filled:hover {
+      background: #dc2626;
+      border-color: #991b1b;
+    }
+
+    .pool-row {
+      display: flex;
+      gap: 9px;
+      flex-wrap: wrap;
+      padding: 4px 0;
+      min-height: 54px;
+      align-items: center;
+    }
+    .pool-btn {
+      min-width: 60px;
+      height: 50px;
+      padding: 0 15px;
+      border-radius: 12px;
+      border: 2px solid #cbd5e1;
+      background: #ffffff;
+      font-size: 19px;
+      font-weight: 800;
+      color: var(--text-main);
+      cursor: pointer;
+      box-shadow: 0 3px 0 #cbd5e1;
+      white-space: nowrap;
+    }
+    .pool-btn:hover {
+      border-color: var(--teal-main);
+      background: var(--bg-soft);
+    }
+    .pool-btn.used-hidden {
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    /* Sao 2: 4 thẻ nghe phân biệt Pinyin & Thanh điệu */
+    .listen-choices-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin: 4px 0;
+    }
+    .listen-choice-card {
+      background: #ffffff;
+      border: 2px solid #cbd5e1;
+      border-radius: 16px;
+      padding: 14px 10px;
+      text-align: center;
+      cursor: pointer;
+      box-shadow: 0 4px 0 #cbd5e1;
+      transition: border-color 0.12s, background-color 0.12s;
+    }
+    .listen-choice-card:hover {
+      border-color: var(--teal-main);
+      background: var(--bg-soft);
+    }
+    .listen-choice-card.wrong-shake {
+      background: #fee2e2;
+      border-color: #ef4444;
+      color: #991b1b;
+    }
+    .listen-choice-pinyin {
+      font-size: 30px;
+      font-weight: 900;
+      color: var(--text-main);
+      margin-bottom: 4px;
+    }
+    .listen-choice-tag {
+      display: inline-block;
+      background: #f0fdfa;
+      border: 1px solid #99f6e4;
+      color: var(--teal-dark);
+      font-size: 12px;
+      font-weight: 800;
+      padding: 2px 8px;
+      border-radius: 999px;
+    }
+
+    /* Lưới 10 câu (2 cột x 5 hàng dọc lấp đầy trang) */
+    .words-grid-10 {
+      flex: 1;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      grid-template-rows: repeat(5, 1fr);
+      gap: 9px;
+      min-height: 300px;
+    }
+    .word-item-card {
+      border-radius: 14px;
+      border: 2px solid #e2e8f0;
+      background: #f8fafc;
+      padding: 8px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .word-item-card.current-word {
+      background: #ffffff;
+      border-color: var(--teal-main);
+      box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.12);
+    }
+    /* Màu xanh đậm rõ nét cho các câu đã hoàn thành */
+    .word-item-card.completed-word {
+      background: var(--teal-dark) !important;
+      border-color: #042f2e !important;
+      color: #ffffff !important;
+    }
+    .word-romaji-title {
+      font-size: 17px;
+      font-weight: 900;
+    }
+    .word-meaning-sub {
+      font-size: 12px;
+      opacity: 0.88;
+      margin-top: 2px;
+    }
+    .word-status-badge {
+      padding: 5px 11px;
+      border-radius: 9px;
+      font-size: 12px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    /* Hộp thoại Mã chuyển máy */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.55);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+    }
+    .modal-backdrop.open {
+      display: flex;
+    }
+    .modal-box {
+      background: #fff;
+      border-radius: 20px;
+      max-width: 440px;
+      width: 92%;
+      padding: 22px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+    }
+    .code-input {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 10px;
+      font-family: monospace;
+      font-size: 13px;
+      margin: 8px 0 12px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="app-layout" id="app-layout">
+  <!-- CỘT TRÁI: BẢNG CHỮ CÁI PINYIN (THANH MẪU & VẬN MẪU) -->
+  <aside class="col-side" id="col-left">
+    <div class="left-header">
+      <div class="brand-row">
+        <div class="brand-box">
+          <div class="brand-logo">拼</div>
+          <div>
+            <div class="brand-title">Pinyin</div>
+            <div class="brand-sub">PHÁT ÂM TỪ GỐC</div>
+          </div>
+        </div>
+        <div class="star-counter" id="total-stars-badge">⭐ 0/90</div>
+      </div>
+
+      <button class="sync-btn" onclick="openSyncModal()">📲 Mã chuyển máy</button>
+
+      <div class="script-tabs">
+        <button class="script-tab active" id="tab-initials" onclick="switchLeftTab('initials')">23 Thanh mẫu</button>
+        <button class="script-tab" id="tab-finals" onclick="switchLeftTab('finals')">36 Vận mẫu & Dấu</button>
+      </div>
+    </div>
+
+    <div class="left-body" id="left-body-content"></div>
+  </aside>
+
+  <!-- CỘT GIỮA: BẢN ĐỒ CHỮ CÁI / MÀN HÌNH BÀI HỌC -->
+  <main class="col-center" id="col-center">
+    <div class="center-header" id="center-header"></div>
+    <div class="center-scroll" id="center-scroll"></div>
+  </main>
+
+  <!-- CỘT PHẢI: KẾT QUẢ GHÉP ÂM & KHẨU HÌNH -->
+  <aside class="col-side" id="col-right">
+    <div class="right-wrap">
+      <div class="result-card">
+        <div class="result-label">KẾT QUẢ PHÁT ÂM PINYIN</div>
+        <div class="result-kana" id="right-main-sym">bā</div>
+        <div class="result-romaji" id="right-read-guide">Đọc mẫu: "pa" (Thanh 1 cao ngang)</div>
+        <div class="result-pair" id="right-meaning">b + a + Thanh 1 (ˉ) · Số 8</div>
+        <button class="btn-listen" onclick="speakSelectedRight()">🔊 Nghe phát âm chuẩn</button>
+      </div>
+
+      <div class="note-card">
+        <div>
+          <div class="note-top">
+            <span class="note-title" id="note-title">Khẩu hình & Cách ghép âm</span>
+            <span class="note-formula" id="note-formula">b + a + T1</span>
+          </div>
+          <div class="note-body" id="note-body">
+            Thanh mẫu b là âm hai môi KHÔNG bật hơi (đọc gần giống chữ p nhẹ tiếng Việt), ghép với vận mẫu a mở rộng miệng và giữ giọng cao ngang đều ở Thanh 1 (ˉ).
+          </div>
+        </div>
+        <div class="note-footer">
+          Lộ trình cho người mới bắt đầu: Học thuộc Thanh mẫu, Vận mẫu & 4 Thanh điệu qua 3 bước: ⭐1 Ghép âm Pinyin ➔ ⭐2 Nghe phân biệt ➔ ⭐3 Nghe chép lại Pinyin.
+        </div>
+      </div>
+    </div>
+  </aside>
+</div>
+
+<!-- HỘP THOẠI MÃ CHUYỂN MÁY -->
+<div class="modal-backdrop" id="sync-modal">
+  <div class="modal-box">
+    <h3 style="font-size:17px;font-weight:800;margin-bottom:6px;">📲 Mã chuyển tiến độ Pinyin</h3>
+    <p style="font-size:12.5px;color:#64748b;margin-bottom:8px;">Copy mã dưới đây để dán sang máy tính hoặc điện thoại khác:</p>
+    <input type="text" class="code-input" id="export-code-box" readonly onclick="this.select()">
+    <button class="btn-listen" style="margin-top:0;margin-bottom:14px;" onclick="copySyncCode()">📋 Copy Mã Tiến Độ</button>
+
+    <p style="font-size:12.5px;color:#64748b;margin-bottom:4px;">Hoặc dán mã từ máy khác vào đây để khôi phục:</p>
+    <input type="text" class="code-input" id="import-code-box" placeholder="Dán mã PYN-... vào đây">
+    <div style="display:flex;gap:8px;justify-content:flex-end;">
+      <button class="btn-outline" onclick="closeSyncModal()">Đóng</button>
+      <button class="btn-outline" style="background:#0d9488;color:#fff;border-color:#0f766e;" onclick="applySyncCode()">Nạp tiến độ</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // =========================================================================
+  // 1. DỮ LIỆU BẢNG CHỮ CÁI PINYIN Ở CỘT TRÁI (23 THANH MẪU & 36 VẬN MẪU + DẤU)
+  // =========================================================================
+  const INITIALS_CHART = [
+    { group: 'Âm hai môi & Răng môi (b, p, m, f)', items: [
+      { sym: 'b', sample: 'bā', tts: '八', read: 'Đọc như "p" nhẹ (không bật hơi)', formula: 'b + o ➔ bo', note: 'Khép hai môi rồi mở tự nhiên, KHÔNG bật hơi mạnh ra ngoài.' },
+      { sym: 'p', sample: 'pā', tts: '趴', read: 'Đọc như "p" bật hơi mạnh', formula: 'p + o ➔ po', note: 'Mím hai môi rồi bật luồng hơi mạnh ra ngoài (đặt tờ giấy trước miệng giấy sẽ bay).' },
+      { sym: 'm', sample: 'mā', tts: '妈', read: 'Đọc như chữ "m" tiếng Việt', formula: 'm + o ➔ mo', note: 'Âm mũi hai môi, phát âm giống hệt chữ m trong tiếng Việt.' },
+      { sym: 'f', sample: 'fā', tts: '发', read: 'Đọc như chữ "ph" tiếng Việt', formula: 'f + o ➔ fo', note: 'Răng trên chạm nhẹ môi dưới, đẩy hơi ra giống chữ ph.' }
+    ]},
+    { group: 'Âm đầu lưỡi giữa (d, t, n, l)', items: [
+      { sym: 'd', sample: 'dā', tts: '搭', read: 'Đọc như chữ "t" tiếng Việt', formula: 'd + e ➔ de', note: 'Đầu lưỡi chạm lợi trên, không bật hơi (nghe giống chữ t trong "ta").' },
+      { sym: 't', sample: 'tā', tts: '他', read: 'Đọc như chữ "th" bật hơi', formula: 't + e ➔ te', note: 'Đầu lưỡi chạm lợi trên và bật hơi mạnh ra ngoài (giống chữ th).' },
+      { sym: 'n', sample: 'nā', tts: '那', read: 'Đọc như chữ "n" tiếng Việt', formula: 'n + e ➔ ne', note: 'Âm mũi đầu lưỡi, giống chữ n tiếng Việt.' },
+      { sym: 'l', sample: 'lā', tts: '拉', read: 'Đọc như chữ "l" tiếng Việt', formula: 'l + e ➔ le', note: 'Đầu lưỡi chạm lợi trên, phát âm giống chữ l tiếng Việt.' }
+    ]},
+    { group: 'Âm gốc lưỡi (g, k, h)', items: [
+      { sym: 'g', sample: 'gē', tts: '哥', read: 'Đọc như chữ "c/k" tiếng Việt', formula: 'g + e ➔ ge', note: 'Gốc lưỡi nâng lên chạm ngạc mềm, không bật hơi (giống chữ c/k).' },
+      { sym: 'k', sample: 'kē', tts: '科', read: 'Đọc như "kh" bật hơi mạnh', formula: 'k + e ➔ ke', note: 'Gốc lưỡi nâng lên rồi bật luồng hơi mạnh từ cổ họng ra.' },
+      { sym: 'h', sample: 'hē', tts: '喝', read: 'Đọc giữa "h" và "kh" nhẹ', formula: 'h + e ➔ he', note: 'Ma sát nhẹ ở cuống họng, nghe êm giữa chữ h và kh.' }
+    ]},
+    { group: 'Âm mặt lưỡi (j, q, x)', items: [
+      { sym: 'j', sample: 'jī', tts: '鸡', read: 'Đọc như "ch" nhẹ (mặt lưỡi)', formula: 'j + i ➔ ji', note: 'Mặt lưỡi áp sát vòm miệng trên, đầu lưỡi hạ xuống sau răng dưới, không bật hơi.' },
+      { sym: 'q', sample: 'qī', tts: '七', read: 'Đọc như "ch" bật hơi mạnh', formula: 'q + i ➔ qi', note: 'Giữ khẩu hình giống chữ j nhưng bật luồng hơi mạnh ra ngoài.' },
+      { sym: 'x', sample: 'xī', tts: '西', read: 'Đọc như chữ "x" tiếng Việt', formula: 'x + i ➔ xi', note: 'Mặt lưỡi nâng nhẹ, hơi xì êm qua khe lưỡi giống chữ x.' }
+    ]},
+    { group: 'Âm đầu lưỡi thẳng (z, c, s)', items: [
+      { sym: 'z', sample: 'zī', tts: '资', read: 'Đọc như "ch" thẳng lưỡi', formula: 'z + i ➔ zi', note: 'Đầu lưỡi duỗi thẳng chạm mặt sau răng cửa trên, không bật hơi.' },
+      { sym: 'c', sample: 'cī', tts: '次', read: 'Đọc như "z" nhưng bật hơi mạnh', formula: 'c + i ➔ ci', note: 'Đầu lưỡi thẳng chạm răng cửa rồi bật luồng hơi mạnh ra ngoài.' },
+      { sym: 's', sample: 'sī', tts: '丝', read: 'Đọc như chữ "x" sắc nét', formula: 's + i ➔ si', note: 'Đầu lưỡi thẳng, hơi thoát qua kẽ răng tạo âm xì sắc nét.' }
+    ]},
+    { group: 'Âm cong lưỡi & Bán nguyên âm (zh, ch, sh, r, y, w)', items: [
+      { sym: 'zh', sample: 'zhī', tts: '知', read: 'Đọc như chữ "tr" cong lưỡi', formula: 'zh + i ➔ zhi', note: 'Uốn cong đầu lưỡi lên vòm cứng, không bật hơi (giống chữ tr).' },
+      { sym: 'ch', sample: 'chī', tts: '吃', read: 'Đọc như "tr" cong lưỡi + bật hơi', formula: 'ch + i ➔ chi', note: 'Uốn cong đầu lưỡi giống zh nhưng bật hơi mạnh ra ngoài.' },
+      { sym: 'sh', sample: 'shī', tts: '师', read: 'Đọc như chữ "s" cong lưỡi', formula: 'sh + i ➔ shi', note: 'Cong đầu lưỡi lên, đẩy hơi tạo âm s nặng.' },
+      { sym: 'r', sample: 'rì', tts: '日', read: 'Đọc như chữ "r" cong lưỡi êm', formula: 'r + i ➔ ri', note: 'Cong đầu lưỡi và rung dây thanh nhẹ nhàng.' },
+      { sym: 'y', sample: 'yī', tts: '衣', read: 'Đọc như âm "i / d" nhẹ', formula: 'y + i ➔ yi', note: 'Chữ cái đại diện cho vận mẫu i đứng đầu âm tiết.' },
+      { sym: 'w', sample: 'wū', tts: '乌', read: 'Đọc như âm "u / qu" nhẹ', formula: 'w + u ➔ wu', note: 'Chữ cái đại diện cho vận mẫu u đứng đầu âm tiết.' }
+    ]}
+  ];
+
+  const FINALS_CHART = [
+    { group: '6 Vận mẫu đơn & 4 Thanh điệu', items: [
+      { sym: 'a', sample: 'ā', tts: '阿', read: 'Đọc như chữ "a" mở rộng miệng', formula: 'Vận mẫu đơn a', note: 'Há miệng tự nhiên, lưỡi đặt thấp.' },
+      { sym: 'o', sample: 'ō', tts: '喔', read: 'Đọc như "ô/ua" tròn môi', formula: 'Vận mẫu đơn o', note: 'Môi thu tròn vừa phải.' },
+      { sym: 'e', sample: 'ē', tts: '鹅', read: 'Đọc như "ơ / ưa" tiếng Việt', formula: 'Vận mẫu đơn e', note: 'Miệng hơi hé ngang, phát âm giữa ơ và ưa.' },
+      { sym: 'i', sample: 'yī', tts: '衣', read: 'Đọc như "i" kéo khóe miệng', formula: 'Vận mẫu đơn i', note: 'Đọc là "i", riêng khi đi sau z, c, s, zh, ch, sh, r thì đọc là "ư".' },
+      { sym: 'u', sample: 'wū', tts: '乌', read: 'Đọc như "u" tròn môi', formula: 'Vận mẫu đơn u', note: 'Chu tròn hai môi về phía trước.' },
+      { sym: 'ü', sample: 'yū', tts: '迂', read: 'Đọc như "uy" tròn môi', formula: 'Vận mẫu đơn ü', note: 'Phát âm i nhưng giữ hai môi chu tròn từ đầu đến cuối (như "uy").' },
+      { sym: 'ˉ ˊ', sample: 'mā má', tts: '妈麻', read: 'Thanh 1 (ngang) & Thanh 2 (lên)', formula: 'Dấu ˉ và ˊ', note: 'Thanh 1 cao ngang đều; Thanh 2 kéo từ trung bình lên cao như hỏi chấm.' },
+      { sym: 'ˇ ˋ', sample: 'mǎ mà', tts: '马骂', read: 'Thanh 3 (trầm-lên) & Thanh 4 (xuống)', formula: 'Dấu ˇ và ˋ', note: 'Thanh 3 hạ thấp giọng rồi vòng lên; Thanh 4 dứt khoát từ cao xuống thấp.' }
+    ]},
+    { group: 'Vận mẫu kép (ai, ei, ui, ao, ou, iu, ie, üe, er)', items: [
+      { sym: 'ai', sample: 'ài', tts: '爱', read: 'Đọc như chữ "ai" tiếng Việt', formula: 'a + i ➔ ai', note: 'Mở miệng âm a rồi lướt nhanh sang i.' },
+      { sym: 'ei', sample: 'bēi', tts: '杯', read: 'Đọc như chữ "ây" tiếng Việt', formula: 'e + i ➔ ei', note: 'Bắt đầu bằng âm ê/ơ rồi lướt sang i (nghe giống "ây").' },
+      { sym: 'ui', sample: 'shuǐ', tts: '水', read: 'Đọc như "uây" tiếng Việt', formula: 'u + ei ➔ ui', note: 'Viết tắt của uei, đọc tròn môi u rồi lướt sang ây ("uây").' },
+      { sym: 'ao', sample: 'hǎo', tts: '好', read: 'Đọc như chữ "ao" tiếng Việt', formula: 'a + o ➔ ao', note: 'Mở miệng âm a rồi thu tròn môi sang o.' },
+      { sym: 'ou', sample: 'kǒu', tts: '口', read: 'Đọc như chữ "âu" tiếng Việt', formula: 'o + u ➔ ou', note: 'Phát âm giống vần "âu" trong tiếng Việt.' },
+      { sym: 'iu', sample: 'liù', tts: '六', read: 'Đọc như "iêu / iu"', formula: 'i + ou ➔ iu', note: 'Viết tắt của iou, đọc lướt từ i sang âu ("iêu").' },
+      { sym: 'ie', sample: 'xiè', tts: '谢', read: 'Đọc như "i-ê" tiếng Việt', formula: 'i + ê ➔ ie', note: 'Lướt từ âm i sang âm ê nhẹ.' },
+      { sym: 'üe', sample: 'yuè', tts: '月', read: 'Đọc như "uy-ê" tròn môi', formula: 'ü + ê ➔ üe', note: 'Khi đi với j, q, x, y thì bỏ 2 dấu chấm trên đầu (viết là jue, que, xue, yue).' },
+      { sym: 'er', sample: 'èr', tts: '二', read: 'Đọc "ơ" đồng thời cuộn lưỡi', formula: 'e + r ➔ er', note: 'Vừa phát âm ơ/a vừa uốn cong đầu lưỡi lên vòm miệng.' }
+    ]},
+    { group: 'Vận mẫu mũi trước & sau (an, en, in, un, ün / ang, eng, ing, ong)', items: [
+      { sym: 'an', sample: 'ān', tts: '安', read: 'Đọc như chữ "an" tiếng Việt', formula: 'a + n ➔ an', note: 'Âm mũi trước, kết thúc bằng đầu lưỡi chạm lợi trên.' },
+      { sym: 'en', sample: 'ēn', tts: '恩', read: 'Đọc như chữ "ân" tiếng Việt', formula: 'e + n ➔ en', note: 'Phát âm giống vần "ân" trong tiếng Việt.' },
+      { sym: 'in', sample: 'yīn', tts: '音', read: 'Đọc như chữ "in" tiếng Việt', formula: 'i + n ➔ in', note: 'Phát âm giống vần "in" trong tiếng Việt.' },
+      { sym: 'un', sample: 'chūn', tts: '春', read: 'Đọc như "uân" tiếng Việt', formula: 'u + en ➔ un', note: 'Viết tắt của uen, đọc tròn môi giống vần "uân".' },
+      { sym: 'ang', sample: 'bāng', tts: '帮', read: 'Đọc như "ang" mở rộng họng', formula: 'a + ng ➔ ang', note: 'Âm mũi sau, mở rộng khoang miệng và ngân vang ở cuống họng.' },
+      { sym: 'eng', sample: 'fēng', tts: '风', read: 'Đọc như "âng" ngân mũi sau', formula: 'e + ng ➔ eng', note: 'Đọc giống vần "âng" kết thúc bằng âm ng ở cuống họng.' },
+      { sym: 'ing', sample: 'xīng', tts: '星', read: 'Đọc như "inh" ngân vang', formula: 'i + ng ➔ ing', note: 'Đọc giữa "inh" và "iêng" nhẹ.' },
+      { sym: 'ong', sample: 'zhōng', tts: '中', read: 'Đọc như "ung" tròn môi', formula: 'u + ng ➔ ong', note: 'Chu tròn môi giống vần "ung" tiếng Việt.' }
+    ]}
+  ];
+
+  // =========================================================================
+  // 2. DỮ LIỆU 30 ẢI LUYỆN BẢNG CHỮ CÁI PINYIN & PHÁT ÂM CHO NGƯỜI MỚI HỌC
+  // Mỗi mục gồm: [Pinyin chuẩn, Chữ TTS để máy phát âm chuẩn 100%, Mảnh ghép Pinyin, Mô tả cách đọc & nghĩa, 3 âm dễ nhầm để luyện nghe Sao 2]
+  // =========================================================================
+  const RAW_30_LEVELS = [
+    // CHẶNG 1 (ẢI 1 - 10): NGUYÊN ÂM, 4 THANH ĐIỆU & 23 THANH MẪU CƠ BẢN
+    { id: 1, stage: 1, icon: 'a o e', label: 'Nguyên âm & 4 Dấu', items: [
+      ['ā', '阿', ['a', 'Thanh 1 (ˉ)'], 'Âm a · Thanh 1 (ngang cao)', ['á', 'ǎ', 'à']],
+      ['á', '啊', ['a', 'Thanh 2 (ˊ)'], 'Âm a · Thanh 2 (lên giọng)', ['ā', 'ǎ', 'à']],
+      ['ǎ', 'ǎ', ['a', 'Thanh 3 (ˇ)'], 'Âm a · Thanh 3 (trầm-lên)', ['ā', 'á', 'à']],
+      ['à', '爸', ['a', 'Thanh 4 (ˋ)'], 'Âm a · Thanh 4 (xuống dứt khoát)', ['ā', 'á', 'ǎ']],
+      ['ō', '喔', ['o', 'Thanh 1 (ˉ)'], 'Âm o · Thanh 1 (tròn môi)', ['ó', 'ǒ', 'ò']],
+      ['ē', '阿', ['e', 'Thanh 1 (ˉ)'], 'Âm e (ơ/ưa) · Thanh 1', ['é', 'ě', 'è']],
+      ['é', '鹅', ['e', 'Thanh 2 (ˊ)'], 'Âm e · Thanh 2 (Con ngỗng)', ['ē', 'ě', 'è']],
+      ['yī', '衣', ['i', 'Thanh 1 (ˉ)'], 'Âm i · Thanh 1 (Số 1 / Áo)', ['yí', 'yǐ', 'yì']],
+      ['wǔ', '五', ['u', 'Thanh 3 (ˇ)'], 'Âm u · Thanh 3 (Số 5)', ['wū', 'wú', 'wù']],
+      ['yú', '鱼', ['ü', 'Thanh 2 (ˊ)'], 'Âm ü (uy) · Thanh 2 (Con cá)', ['yū', 'yǔ', 'yù']]
+    ]},
+    { id: 2, stage: 1, icon: 'b p m f', label: 'Nhóm môi B P M F', items: [
+      ['bā', '八', ['b', 'a', 'Thanh 1 (ˉ)'], 'Số 8 (Không bật hơi · Thanh 1)', ['pā', 'bǎ', 'bà']],
+      ['bà', '爸', ['b', 'a', 'Thanh 4 (ˋ)'], 'Bố (Không bật hơi · Thanh 4)', ['bā', 'pà', 'mà']],
+      ['pā', '趴', ['p', 'a', 'Thanh 1 (ˉ)'], 'Nằm sấp (Bật hơi mạnh · Thanh 1)', ['bā', 'pǎ', 'fā']],
+      ['pó', '婆', ['p', 'o', 'Thanh 2 (ˊ)'], 'Bà ngoại (Bật hơi · Thanh 2)', ['bó', 'mó', 'fó']],
+      ['mā', '妈', ['m', 'a', 'Thanh 1 (ˉ)'], 'Mẹ (Âm mũi môi · Thanh 1)', ['má', 'mǎ', 'mà']],
+      ['mǎ', '马', ['m', 'a', 'Thanh 3 (ˇ)'], 'Con ngựa (Âm m · Thanh 3)', ['mā', 'má', 'mà']],
+      ['mù', '木', ['m', 'u', 'Thanh 4 (ˋ)'], 'Gỗ / Cây (Âm m · Thanh 4)', ['mǔ', 'bù', 'fù']],
+      ['fā', '发', ['f', 'a', 'Thanh 1 (ˉ)'], 'Phát ra (Âm răng môi · Thanh 1)', ['pā', 'bā', 'fà']],
+      ['fó', '佛', ['f', 'o', 'Thanh 2 (ˊ)'], 'Đức Phật (Âm f · Thanh 2)', ['pó', 'bó', 'fǒ']],
+      ['fù', '父', ['f', 'u', 'Thanh 4 (ˋ)'], 'Phụ thân (Âm f · Thanh 4)', ['fū', 'fǔ', 'bù']]
+    ]},
+    { id: 3, stage: 1, icon: 'd t n l', label: 'Đầu lưỡi D T N L', items: [
+      ['dà', '大', ['d', 'a', 'Thanh 4 (ˋ)'], 'To lớn (Đọc như t · Thanh 4)', ['tà', 'dā', 'dǎ']],
+      ['dì', '地', ['d', 'i', 'Thanh 4 (ˋ)'], 'Mặt đất (Đọc như ti · Thanh 4)', ['tì', 'dī', 'nì']],
+      ['dú', '读', ['d', 'u', 'Thanh 2 (ˊ)'], 'Đọc sách (Đọc như tu · Thanh 2)', ['tú', 'dǔ', 'lú']],
+      ['tā', '他', ['t', 'a', 'Thanh 1 (ˉ)'], 'Anh ấy (Đọc như tha · Thanh 1)', ['dā', 'tǎ', 'tà']],
+      ['tǔ', '土', ['t', 'u', 'Thanh 3 (ˇ)'], 'Đất (Đọc như thu · Thanh 3)', ['dǔ', 'tù', 'lǔ']],
+      ['tù', '兔', ['t', 'u', 'Thanh 4 (ˋ)'], 'Con thỏ (Đọc như thu · Thanh 4)', ['dù', 'tǔ', 'lù']],
+      ['nǐ', '你', ['n', 'i', 'Thanh 3 (ˇ)'], 'Bạn (Âm n · Thanh 3)', ['lǐ', 'nì', 'mǐ']],
+      ['nǚ', '女', ['n', 'ü', 'Thanh 3 (ˇ)'], 'Phụ nữ (n + ü tròn môi · Thanh 3)', ['lǚ', 'nǔ', 'nǐ']],
+      ['lè', '乐', ['l', 'e', 'Thanh 4 (ˋ)'], 'Vui vẻ (Âm l + e · Thanh 4)', ['nè', 'dè', 'tè']],
+      ['lù', '路', ['l', 'u', 'Thanh 4 (ˋ)'], 'Con đường (Âm l · Thanh 4)', ['nù', 'lǔ', 'dù']]
+    ]},
+    { id: 4, stage: 1, icon: 'g k h', label: 'Gốc lưỡi G K H', items: [
+      ['gē', '哥', ['g', 'e', 'Thanh 1 (ˉ)'], 'Anh trai (Đọc như cưa · Thanh 1)', ['kē', 'hē', 'gè']],
+      ['gū', '姑', ['g', 'u', 'Thanh 1 (ˉ)'], 'Cô (Đọc như cu · Thanh 1)', ['kū', 'hū', 'gǔ']],
+      ['gǔ', '古', ['g', 'u', 'Thanh 3 (ˇ)'], 'Cổ xưa (Âm g · Thanh 3)', ['kǔ', 'gū', 'hǔ']],
+      ['kē', '科', ['k', 'e', 'Thanh 1 (ˉ)'], 'Khoa học (Bật hơi mạnh · Thanh 1)', ['gē', 'hē', 'kě']],
+      ['kě', '可', ['k', 'e', 'Thanh 3 (ˇ)'], 'Khả năng / Khát (Bật hơi · Thanh 3)', ['gě', 'kē', 'kè']],
+      ['kè', '客', ['k', 'e', 'Thanh 4 (ˋ)'], 'Khách (Bật hơi · Thanh 4)', ['gè', 'kě', 'hè']],
+      ['kū', '哭', ['k', 'u', 'Thanh 1 (ˉ)'], 'Khóc (Bật hơi · Thanh 1)', ['gū', 'kǔ', 'hū']],
+      ['kǔ', '苦', ['k', 'u', 'Thanh 3 (ˇ)'], 'Đắng / Khổ (Bật hơi · Thanh 3)', ['gǔ', 'kū', 'hǔ']],
+      ['hē', '喝', ['h', 'e', 'Thanh 1 (ˉ)'], 'Uống (Âm họng h · Thanh 1)', ['kē', 'gē', 'hè']],
+      ['hǔ', '虎', ['h', 'u', 'Thanh 3 (ˇ)'], 'Con hổ (Âm h · Thanh 3)', ['kǔ', 'gǔ', 'hù']]
+    ]},
+    { id: 5, stage: 1, icon: 'j q x', label: 'Mặt lưỡi J Q X', items: [
+      ['jī', '鸡', ['j', 'i', 'Thanh 1 (ˉ)'], 'Con gà (Mặt lưỡi không bật hơi · T1)', ['qī', 'xī', 'jǐ']],
+      ['jí', '急', ['j', 'i', 'Thanh 2 (ˊ)'], 'Gấp gáp (Âm j · Thanh 2)', ['qí', 'xí', 'jī']],
+      ['jǐ', '几', ['j', 'i', 'Thanh 3 (ˇ)'], 'Mấy (Âm j · Thanh 3)', ['qǐ', 'xǐ', 'jì']],
+      ['jū', '居', ['j', 'ü', 'Thanh 1 (ˉ)'], 'Cư trú (j + ü bỏ 2 chấm · Thanh 1)', ['qū', 'xū', 'jī']],
+      ['qī', '七', ['q', 'i', 'Thanh 1 (ˉ)'], 'Số 7 (Mặt lưỡi bật hơi mạnh · T1)', ['jī', 'xī', 'qǐ']],
+      ['qí', '骑', ['q', 'i', 'Thanh 2 (ˊ)'], 'Cưỡi ngựa (Bật hơi · Thanh 2)', ['jí', 'xí', 'qī']],
+      ['qǐ', '起', ['q', 'i', 'Thanh 3 (ˇ)'], 'Thức dậy (Bật hơi · Thanh 3)', ['jǐ', 'xǐ', 'qì']],
+      ['qù', '去', ['q', 'ü', 'Thanh 4 (ˋ)'], 'Đi (q + ü bỏ 2 chấm · Thanh 4)', ['jù', 'xù', 'qì']],
+      ['xī', '西', ['x', 'i', 'Thanh 1 (ˉ)'], 'Phía Tây (Âm x êm · Thanh 1)', ['jī', 'qī', 'xǐ']],
+      ['xǐ', '洗', ['x', 'i', 'Thanh 3 (ˇ)'], 'Rửa / Giặt (Âm x · Thanh 3)', ['jǐ', 'qǐ', 'xì']]
+    ]},
+    { id: 6, stage: 1, icon: 'z c s', label: 'Âm răng thẳng Z C S', items: [
+      ['zā', '扎', ['z', 'a', 'Thanh 1 (ˉ)'], 'Buộc (Thẳng lưỡi không bật hơi · T1)', ['cā', 'sā', 'zhā']],
+      ['zá', '杂', ['z', 'a', 'Thanh 2 (ˊ)'], 'Phức tạp (Âm z · Thanh 2)', ['cá', 'sá', 'zhá']],
+      ['zǔ', '祖', ['z', 'u', 'Thanh 3 (ˇ)'], 'Tổ tiên (Âm z · Thanh 3)', ['cǔ', 'sǔ', 'zhǔ']],
+      ['zì', '字', ['z', 'i (ư)', 'Thanh 4 (ˋ)'], 'Chữ viết (zi đọc là "chư" thẳng lưỡi)', ['cì', 'sì', 'zhì']],
+      ['cā', '擦', ['c', 'a', 'Thanh 1 (ˉ)'], 'Lau chùi (Thẳng lưỡi bật hơi · T1)', ['zā', 'sā', 'chā']],
+      ['cū', '粗', ['c', 'u', 'Thanh 1 (ˉ)'], 'Thô / To (Bật hơi · Thanh 1)', ['zū', 'sū', 'chū']],
+      ['cì', '次', ['c', 'i (ư)', 'Thanh 4 (ˋ)'], 'Lần (ci bật hơi đọc là "tsư")', ['zì', 'sì', 'chì']],
+      ['sā', '撒', ['s', 'a', 'Thanh 1 (ˉ)'], 'Rắc / Vãi (Âm s thẳng lưỡi · T1)', ['zā', 'cā', 'shā']],
+      ['sū', '苏', ['s', 'u', 'Thanh 1 (ˉ)'], 'Tỉnh dậy (Âm s · Thanh 1)', ['zū', 'cū', 'shū']],
+      ['sì', '四', ['s', 'i (ư)', 'Thanh 4 (ˋ)'], 'Số 4 (si đọc là "xư" · Thanh 4)', ['zì', 'cì', 'shì']]
+    ]},
+    { id: 7, stage: 1, icon: 'zh ch sh r', label: 'Cong lưỡi ZH CH SH R', items: [
+      ['zhā', '扎', ['zh', 'a', 'Thanh 1 (ˉ)'], 'Đâm (Cong lưỡi như "tra" · T1)', ['chā', 'shā', 'zā']],
+      ['zhú', '竹', ['zh', 'u', 'Thanh 2 (ˊ)'], 'Cây tre (Cong lưỡi · Thanh 2)', ['chú', 'shú', 'zú']],
+      ['zhī', '知', ['zh', 'i (ư)', 'Thanh 1 (ˉ)'], 'Biết (Đọc như "trư" cong lưỡi)', ['chī', 'shī', 'zī']],
+      ['chā', '叉', ['ch', 'a', 'Thanh 1 (ˉ)'], 'Cái nĩa (Cong lưỡi + Bật hơi · T1)', ['zhā', 'shā', 'cā']],
+      ['chá', '茶', ['ch', 'a', 'Thanh 2 (ˊ)'], 'Trà xanh (Cong lưỡi bật hơi · T2)', ['zhá', 'shá', 'cá']],
+      ['chī', '吃', ['ch', 'i (ư)', 'Thanh 1 (ˉ)'], 'Ăn (Cong lưỡi bật hơi · Thanh 1)', ['zhī', 'shī', 'cī']],
+      ['shā', '沙', ['sh', 'a', 'Thanh 1 (ˉ)'], 'Cát (Cong lưỡi như "sa" nặng · T1)', ['zhā', 'chā', 'sā']],
+      ['shū', '书', ['sh', 'u', 'Thanh 1 (ˉ)'], 'Sách (Cong lưỡi · Thanh 1)', ['zhū', 'chū', 'sū']],
+      ['shí', '十', ['sh', 'i (ư)', 'Thanh 2 (ˊ)'], 'Số 10 (Đọc như "sư" · Thanh 2)', ['zhí', 'chí', 'sí']],
+      ['rì', '日', ['r', 'i (ư)', 'Thanh 4 (ˋ)'], 'Mặt trời / Ngày (Đọc như "rư" · T4)', ['shì', 'zhì', 'rè']]
+    ]},
+    { id: 8, stage: 1, icon: 'y w', label: 'Bán nguyên âm Y & W', items: [
+      ['yā', '鸭', ['y', 'a', 'Thanh 1 (ˉ)'], 'Con vịt (y + a · Thanh 1)', ['yá', 'yǎ', 'wā']],
+      ['yá', '牙', ['y', 'a', 'Thanh 2 (ˊ)'], 'Cái răng (y + a · Thanh 2)', ['yā', 'yǎ', 'yà']],
+      ['yě', '也', ['y', 'e', 'Thanh 3 (ˇ)'], 'Cũng (y + e · Thanh 3)', ['yē', 'yé', 'yè']],
+      ['yè', '夜', ['y', 'e', 'Thanh 4 (ˋ)'], 'Ban đêm (y + e · Thanh 4)', ['yē', 'yě', 'yuè']],
+      ['yī', '一', ['y', 'i', 'Thanh 1 (ˉ)'], 'Số 1 (y + i · Thanh 1)', ['yí', 'yǐ', 'wū']],
+      ['yǔ', '雨', ['y', 'ü', 'Thanh 3 (ˇ)'], 'Cơn mưa (y + ü bỏ 2 chấm · T3)', ['yǐ', 'wǔ', 'yù']],
+      ['wā', '蛙', ['w', 'a', 'Thanh 1 (ˉ)'], 'Con ếch (w + a · Thanh 1)', ['wǎ', 'wà', 'yā']],
+      ['wǎ', '瓦', ['w', 'a', 'Thanh 3 (ˇ)'], 'Viên ngói (w + a · Thanh 3)', ['wā', 'wà', 'wǒ']],
+      ['wǒ', '我', ['w', 'o', 'Thanh 3 (ˇ)'], 'Tôi (w + o · Thanh 3)', ['wō', 'wò', 'wǔ']],
+      ['wū', '屋', ['w', 'u', 'Thanh 1 (ˉ)'], 'Ngôi nhà (w + u · Thanh 1)', ['wú', 'wǔ', 'wù']]
+    ]},
+    { id: 9, stage: 1, icon: 'b/p d/t', label: 'Phân biệt Bật Hơi', items: [
+      ['bō', '波', ['b', 'o', 'Thanh 1 (ˉ)'], 'Sóng nước (b KHÔNG bật hơi)', ['pō', 'mō', 'fō']],
+      ['pō', '坡', ['p', 'o', 'Thanh 1 (ˉ)'], 'Sườn dốc (p BẬT HƠI mạnh)', ['bō', 'pó', 'pǒ']],
+      ['bǐ', '笔', ['b', 'i', 'Thanh 3 (ˇ)'], 'Cây bút (b KHÔNG bật hơi)', ['pǐ', 'mǐ', 'dǐ']],
+      ['pǐ', '匹', ['p', 'i', 'Thanh 3 (ˇ)'], 'Con ngựa (p BẬT HƠI mạnh)', ['bǐ', 'pī', 'pì']],
+      ['dù', '肚', ['d', 'u', 'Thanh 4 (ˋ)'], 'Cái bụng (d KHÔNG bật hơi)', ['tù', 'lù', 'bù']],
+      ['tù', '兔', ['t', 'u', 'Thanh 4 (ˋ)'], 'Con thỏ (t BẬT HƠI mạnh)', ['dù', 'tǔ', 'kù']],
+      ['gū', '孤', ['g', 'u', 'Thanh 1 (ˉ)'], 'Cô đơn (g KHÔNG bật hơi)', ['kū', 'hū', 'zhū']],
+      ['kū', '哭', ['k', 'u', 'Thanh 1 (ˉ)'], 'Khóc (k BẬT HƠI mạnh)', ['gū', 'hū', 'kǔ']],
+      ['jū', '居', ['j', 'ü', 'Thanh 1 (ˉ)'], 'Cư trú (j KHÔNG bật hơi)', ['qū', 'xū', 'zhū']],
+      ['qū', '区', ['q', 'ü', 'Thanh 1 (ˉ)'], 'Khu vực (q BẬT HƠI mạnh)', ['jū', 'xū', 'chū']]
+    ]},
+    { id: 10, stage: 1, icon: 'z/zh s/sh', label: 'Thẳng & Cong lưỡi', items: [
+      ['zī', '资', ['z', 'i (ư)', 'Thanh 1 (ˉ)'], 'Tư bản (z THẲNG lưỡi)', ['zhī', 'cī', 'sī']],
+      ['zhī', '知', ['zh', 'i (ư)', 'Thanh 1 (ˉ)'], 'Tri thức (zh CONG lưỡi)', ['zī', 'chī', 'shī']],
+      ['cī', '疵', ['c', 'i (ư)', 'Thanh 1 (ˉ)'], 'Tì vết (c THẲNG lưỡi + bật hơi)', ['chī', 'zī', 'sī']],
+      ['chī', '吃', ['ch', 'i (ư)', 'Thanh 1 (ˉ)'], 'Ăn cơm (ch CONG lưỡi + bật hơi)', ['cī', 'zhī', 'shī']],
+      ['sī', '丝', ['s', 'i (ư)', 'Thanh 1 (ˉ)'], 'Sợi tơ (s THẲNG lưỡi)', ['shī', 'zī', 'cī']],
+      ['shī', '师', ['sh', 'i (ư)', 'Thanh 1 (ˉ)'], 'Thầy giáo (sh CONG lưỡi)', ['sī', 'zhī', 'chī']],
+      ['zú', '足', ['z', 'u', 'Thanh 2 (ˊ)'], 'Bàn chân (z THẲNG lưỡi)', ['zhú', 'cú', 'sú']],
+      ['zhú', '竹', ['zh', 'u', 'Thanh 2 (ˊ)'], 'Cây trúc (zh CONG lưỡi)', ['zú', 'chú', 'shú']],
+      ['sū', '苏', ['s', 'u', 'Thanh 1 (ˉ)'], 'Tỉnh Tô Châu (s THẲNG lưỡi)', ['shū', 'zū', 'cū']],
+      ['shū', '书', ['sh', 'u', 'Thanh 1 (ˉ)'], 'Quyển sách (sh CONG lưỡi)', ['sū', 'zhū', 'chū']]
+    ]},
+
+    // CHẶNG 2 (ẢI 11 - 20): VẬN MẪU KÉP & VẬN MẪU MŨI
+    { id: 11, stage: 2, icon: 'ai ei ui', label: 'Vận mẫu AI EI UI', items: [
+      ['bái', '白', ['b', 'ai', 'Thanh 2 (ˊ)'], 'Màu trắng (b + ai · Thanh 2)', ['pái', 'bǎi', 'běi']],
+      ['mǎi', '买', ['m', 'ai', 'Thanh 3 (ˇ)'], 'Mua (m + ai · Thanh 3)', ['mài', 'měi', 'lǎi']],
+      ['mài', '卖', ['m', 'ai', 'Thanh 4 (ˋ)'], 'Bán (m + ai · Thanh 4)', ['mǎi', 'māi', 'mèi']],
+      ['lái', '来', ['l', 'ai', 'Thanh 2 (ˊ)'], 'Đến (l + ai · Thanh 2)', ['nái', 'lǎi', 'léi']],
+      ['cài', '菜', ['c', 'ai', 'Thanh 4 (ˋ)'], 'Rau / Món ăn (c + ai · Thanh 4)', ['zài', 'sài', 'chài']],
+      ['bēi', '杯', ['b', 'ei', 'Thanh 1 (ˉ)'], 'Cái cốc (b + ei đọc "pây" · T1)', ['pēi', 'bái', 'bǎi']],
+      ['měi', '美', ['m', 'ei', 'Thanh 3 (ˇ)'], 'Đẹp (m + ei đọc "mẩy" · T3)', ['mǎi', 'mèi', 'féi']],
+      ['fēi', '飞', ['f', 'ei', 'Thanh 1 (ˉ)'], 'Bay (f + ei đọc "phây" · T1)', ['féi', 'fěi', 'bēi']],
+      ['shuǐ', '水', ['sh', 'ui', 'Thanh 3 (ˇ)'], 'Nước (sh + ui đọc "suẩy" · T3)', ['shuì', 'suǐ', 'chuǐ']],
+      ['tuǐ', '腿', ['t', 'ui', 'Thanh 3 (ˇ)'], 'Đôi chân (t + ui đọc "thuẩy" · T3)', ['duǐ', 'tuì', 'tǎi']]
+    ]},
+    { id: 12, stage: 2, icon: 'ao ou iu', label: 'Vận mẫu AO OU IU', items: [
+      ['bāo', '包', ['b', 'ao', 'Thanh 1 (ˉ)'], 'Cái túi (b + ao · Thanh 1)', ['pāo', 'bǎo', 'bào']],
+      ['pǎo', '跑', ['p', 'ao', 'Thanh 3 (ˇ)'], 'Chạy (p bật hơi + ao · Thanh 3)', ['bǎo', 'pào', 'mǎo']],
+      ['māo', '猫', ['m', 'ao', 'Thanh 1 (ˉ)'], 'Con mèo (m + ao · Thanh 1)', ['máo', 'mǎo', 'mào']],
+      ['gāo', '高', ['g', 'ao', 'Thanh 1 (ˉ)'], 'Cao (g + ao · Thanh 1)', ['kāo', 'hāo', 'gǎo']],
+      ['hǎo', '好', ['h', 'ao', 'Thanh 3 (ˇ)'], 'Tốt (h + ao · Thanh 3)', ['kǎo', 'gǎo', 'hào']],
+      ['zǎo', '早', ['z', 'ao', 'Thanh 3 (ˇ)'], 'Buổi sáng (z thẳng lưỡi + ao · T3)', ['cǎo', 'sǎo', 'zhǎo']],
+      ['kǒu', '口', ['k', 'ou', 'Thanh 3 (ˇ)'], 'Cái miệng (k + ou đọc "khẩu" · T3)', ['gǒu', 'hǒu', 'kòu']],
+      ['gǒu', '狗', ['g', 'ou', 'Thanh 3 (ˇ)'], 'Con chó (g + ou đọc "cẩu" · T3)', ['kǒu', 'zǒu', 'gòu']],
+      ['zǒu', '走', ['z', 'ou', 'Thanh 3 (ˇ)'], 'Đi bộ (z + ou · Thanh 3)', ['cǒu', 'zhǒu', 'shǒu']],
+      ['liù', '六', ['l', 'iu', 'Thanh 4 (ˋ)'], 'Số 6 (l + iu đọc "liêu" · Thanh 4)', ['niù', 'jiǔ', 'liú']]
+    ]},
+    { id: 13, stage: 2, icon: 'ie üe er', label: 'Vận mẫu IE ÜE ER', items: [
+      ['jiě', '姐', ['j', 'ie', 'Thanh 3 (ˇ)'], 'Chị gái (j + ie · Thanh 3)', ['qiě', 'xiě', 'jiè']],
+      ['qié', '茄', ['q', 'ie', 'Thanh 2 (ˊ)'], 'Quả cà (q bật hơi + ie · Thanh 2)', ['jié', 'xié', 'qiě']],
+      ['xiě', '写', ['x', 'ie', 'Thanh 3 (ˇ)'], 'Viết chữ (x + ie · Thanh 3)', ['xiè', 'jiě', 'qiě']],
+      ['xiè', '谢', ['x', 'ie', 'Thanh 4 (ˋ)'], 'Cảm ơn (x + ie · Thanh 4)', ['xiě', 'jiè', 'qiè']],
+      ['bié', '别', ['b', 'ie', 'Thanh 2 (ˊ)'], 'Đừng (b + ie · Thanh 2)', ['pié', 'dié', 'biě']],
+      ['yuè', '月', ['y', 'üe', 'Thanh 4 (ˋ)'], 'Mặt trăng (y + üe · Thanh 4)', ['yè', 'xuě', 'jué']],
+      ['xuě', '雪', ['x', 'üe', 'Thanh 3 (ˇ)'], 'Tuyết (x + üe · Thanh 3)', ['xǐ', 'xuè', 'quě']],
+      ['xué', '学', ['x', 'üe', 'Thanh 2 (ˊ)'], 'Học tập (x + üe · Thanh 2)', ['xuě', 'jué', 'qué']],
+      ['ér', '儿', ['er', 'Thanh 2 (ˊ)'], 'Con trai (Âm cuốn lưỡi er · T2)', ['ěr', 'èr', 'é']],
+      ['èr', '二', ['er', 'Thanh 4 (ˋ)'], 'Số 2 (Âm cuốn lưỡi er · Thanh 4)', ['ér', 'ěr', 'è']]
+    ]},
+    { id: 14, stage: 2, icon: 'an en in', label: 'Mũi trước AN EN IN UN', items: [
+      ['bān', '班', ['b', 'an', 'Thanh 1 (ˉ)'], 'Lớp học (b + an mũi trước · T1)', ['pān', 'bāng', 'bǎn']],
+      ['màn', '慢', ['m', 'an', 'Thanh 4 (ˋ)'], 'Chậm (m + an · Thanh 4)', ['mǎn', 'màng', 'nàn']],
+      ['nán', '男', ['n', 'an', 'Thanh 2 (ˊ)'], 'Nam giới (n + an · Thanh 2)', ['lán', 'náng', 'nǎn']],
+      ['lán', '蓝', ['l', 'an', 'Thanh 2 (ˊ)'], 'Màu xanh lam (l + an · Thanh 2)', ['nán', 'láng', 'lǎn']],
+      ['shān', '山', ['sh', 'an', 'Thanh 1 (ˉ)'], 'Ngọn núi (sh cong lưỡi + an · T1)', ['sān', 'shāng', 'zhān']],
+      ['sān', '三', ['s', 'an', 'Thanh 1 (ˉ)'], 'Số 3 (s thẳng lưỡi + an · T1)', ['shān', 'cān', 'zān']],
+      ['mén', '门', ['m', 'en', 'Thanh 2 (ˊ)'], 'Cánh cửa (m + en đọc "mần" · T2)', ['rén', 'méng', 'wén']],
+      ['rén', '人', ['r', 'en', 'Thanh 2 (ˊ)'], 'Con người (r + en · Thanh 2)', ['mén', 'réng', 'chén']],
+      ['xīn', '心', ['x', 'in', 'Thanh 1 (ˉ)'], 'Trái tim (x + in · Thanh 1)', ['jīn', 'qīn', 'xīng']],
+      ['chūn', '春', ['ch', 'un', 'Thanh 1 (ˉ)'], 'Mùa xuân (ch + un đọc "chuân")', ['zhūn', 'shūn', 'cūn']]
+    ]},
+    { id: 15, stage: 2, icon: 'ang eng ing', label: 'Mũi sau ANG ENG ING ONG', items: [
+      ['bāng', '帮', ['b', 'ang', 'Thanh 1 (ˉ)'], 'Giúp đỡ (b + ang mũi sau · T1)', ['bān', 'pāng', 'máng']],
+      ['máng', '忙', ['m', 'ang', 'Thanh 2 (ˊ)'], 'Bận rộn (m + ang · Thanh 2)', ['mán', 'fáng', 'bāng']],
+      ['fáng', '房', ['f', 'ang', 'Thanh 2 (ˊ)'], 'Căn phòng (f + ang · Thanh 2)', ['fán', 'máng', 'huáng']],
+      ['fēng', '风', ['f', 'eng', 'Thanh 1 (ˉ)'], 'Cơn gió (f + eng · Thanh 1)', ['fēn', 'dēng', 'lěng']],
+      ['dēng', '灯', ['d', 'eng', 'Thanh 1 (ˉ)'], 'Ngọn đèn (d + eng · Thanh 1)', ['tēng', 'dēn', 'fēng']],
+      ['lěng', '冷', ['l', 'eng', 'Thanh 3 (ˇ)'], 'Lạnh (l + eng · Thanh 3)', ['něng', 'děng', 'lěn']],
+      ['xīng', '星', ['x', 'ing', 'Thanh 1 (ˉ)'], 'Ngôi sao (x + ing · Thanh 1)', ['xīn', 'jīng', 'qīng']],
+      ['tīng', '听', ['t', 'ing', 'Thanh 1 (ˉ)'], 'Lắng nghe (t bật hơi + ing · T1)', ['dīng', 'tīn', 'qīng']],
+      ['dōng', '东', ['d', 'ong', 'Thanh 1 (ˉ)'], 'Phía Đông (d + ong đọc "tung" · T1)', ['tōng', 'zhōng', 'gōng']],
+      ['zhōng', '中', ['zh', 'ong', 'Thanh 1 (ˉ)'], 'Ở giữa (zh cong lưỡi + ong · T1)', ['zōng', 'chōng', 'dōng']]
+    ]},
+    { id: 16, stage: 2, icon: 'ia iao ian', label: 'Vần ghép nhóm I', items: [
+      ['jiā', '家', ['j', 'ia', 'Thanh 1 (ˉ)'], 'Gia đình (j + ia · Thanh 1)', ['qiā', 'xiā', 'jiǎ']],
+      ['xiā', '虾', ['x', 'ia', 'Thanh 1 (ˉ)'], 'Con tôm (x + ia · Thanh 1)', ['jiā', 'xià', 'xiǎo']],
+      ['xiǎo', '小', ['x', 'iao', 'Thanh 3 (ˇ)'], 'Nhỏ bé (x + iao · Thanh 3)', ['shǎo', 'niǎo', 'xiào']],
+      ['niǎo', '鸟', ['n', 'iao', 'Thanh 3 (ˇ)'], 'Con chim (n + iao · Thanh 3)', ['liǎo', 'xiǎo', 'biǎo']],
+      ['tiān', '天', ['t', 'ian', 'Thanh 1 (ˉ)'], 'Bầu trời (t + ian đọc "thiên" · T1)', ['diān', 'qiān', 'tián']],
+      ['miàn', '面', ['m', 'ian', 'Thanh 4 (ˋ)'], 'Mì sợi (m + ian · Thanh 4)', ['biàn', 'niàn', 'miǎn']],
+      ['qián', '钱', ['q', 'ian', 'Thanh 2 (ˊ)'], 'Tiền bạc (q bật hơi + ian · T2)', ['jiān', 'xián', 'tián']],
+      ['liǎng', '两', ['l', 'iang', 'Thanh 3 (ˇ)'], 'Hai (l + iang · Thanh 3)', ['xiǎng', 'niáng', 'liàng']],
+      ['xiǎng', '想', ['x', 'iang', 'Thanh 3 (ˇ)'], 'Nhớ / Muốn (x + iang · Thanh 3)', ['jiǎng', 'qiǎng', 'liǎng']],
+      ['xiónɡ', '熊', ['x', 'iong', 'Thanh 2 (ˊ)'], 'Con gấu (x + iong · Thanh 2)', ['qióng', 'xiōng', 'hóng']]
+    ]},
+    { id: 17, stage: 2, icon: 'ua uo uan', label: 'Vần ghép nhóm U', items: [
+      ['huā', '花', ['h', 'ua', 'Thanh 1 (ˉ)'], 'Bông hoa (h + ua · Thanh 1)', ['guā', 'kuā', 'huà']],
+      ['guā', '瓜', ['g', 'ua', 'Thanh 1 (ˉ)'], 'Quả dưa (g + ua · Thanh 1)', ['kuā', 'huā', 'guǒ']],
+      ['huǒ', '火', ['h', 'uo', 'Thanh 3 (ˇ)'], 'Ngọn lửa (h + uo · Thanh 3)', ['guǒ', 'duǒ', 'shuō']],
+      ['guǒ', '果', ['g', 'uo', 'Thanh 3 (ˇ)'], 'Trái cây (g + uo · Thanh 3)', ['huǒ', 'kuǒ', 'zuǒ']],
+      ['shuō', '说', ['sh', 'uo', 'Thanh 1 (ˉ)'], 'Nói (sh cong lưỡi + uo · T1)', ['suō', 'zhuō', 'duō']],
+      ['kuài', '快', ['k', 'uai', 'Thanh 4 (ˋ)'], 'Nhanh (k bật hơi + uai · Thanh 4)', ['guài', 'huài', 'shuài']],
+      ['shuài', '帅', ['sh', 'uai', 'Thanh 4 (ˋ)'], 'Đẹp trai (sh + uai · Thanh 4)', ['kuài', 'chuài', 'suài']],
+      ['chuán', '船', ['ch', 'uan', 'Thanh 2 (ˊ)'], 'Con thuyền (ch + uan · Thanh 2)', ['zhuán', 'chuáng', 'duǎn']],
+      ['chuáng', '床', ['ch', 'uang', 'Thanh 2 (ˊ)'], 'Cái giường (ch + uang · Thanh 2)', ['chuán', 'huáng', 'shuāng']],
+      ['huáng', '黄', ['h', 'uang', 'Thanh 2 (ˊ)'], 'Màu vàng (h + uang · Thanh 2)', ['wáng', 'guāng', 'chuáng']]
+    ]},
+    { id: 18, stage: 2, icon: 'ju qu xu', label: 'Quy tắc J Q X Y đi với Ü', items: [
+      ['jū', '居', ['j', 'ü (viết u)', 'Thanh 1 (ˉ)'], 'Cư trú (j + ü viết thành ju)', ['qū', 'xū', 'zhū']],
+      ['jú', '菊', ['j', 'ü (viết u)', 'Thanh 2 (ˊ)'], 'Hoa cúc (j + ü · Thanh 2)', ['qú', 'xú', 'zhú']],
+      ['qū', '区', ['q', 'ü (viết u)', 'Thanh 1 (ˉ)'], 'Khu vực (q + ü viết thành qu)', ['jū', 'xū', 'chū']],
+      ['qù', '去', ['q', 'ü (viết u)', 'Thanh 4 (ˋ)'], 'Đi (q + ü · Thanh 4)', ['jù', 'xù', 'chù']],
+      ['xū', '须', ['x', 'ü (viết u)', 'Thanh 1 (ˉ)'], 'Cần phải (x + ü viết thành xu)', ['jū', 'qū', 'shū']],
+      ['yú', '鱼', ['y', 'ü (viết u)', 'Thanh 2 (ˊ)'], 'Con cá (y + ü viết thành yu)', ['wú', 'yǔ', 'rú']],
+      ['yǔ', '雨', ['y', 'ü (viết u)', 'Thanh 3 (ˇ)'], 'Mưa (y + ü · Thanh 3)', ['wǔ', 'yú', 'nǚ']],
+      ['jué', '决', ['j', 'üe (viết ue)', 'Thanh 2 (ˊ)'], 'Quyết định (j + üe · Thanh 2)', ['qué', 'xué', 'jié']],
+      ['quán', '全', ['q', 'üan (viết uan)', 'Thanh 2 (ˊ)'], 'Toàn bộ (q + üan · Thanh 2)', ['juān', 'xuán', 'chuán']],
+      ['yún', '云', ['y', 'ün (viết un)', 'Thanh 2 (ˊ)'], 'Đám mây (y + ün · Thanh 2)', ['yín', 'wén', 'qún']]
+    ]},
+    { id: 19, stage: 2, icon: 'an / ang', label: 'Phân biệt Mũi trước & sau', items: [
+      ['fān', '翻', ['f', 'an', 'Thanh 1 (ˉ)'], 'Lật trang (an MŨI TRƯỚC)', ['fāng', 'fēn', 'fēng']],
+      ['fāng', '方', ['f', 'ang', 'Thanh 1 (ˉ)'], 'Phương hướng (ang MŨI SAU)', ['fān', 'fēng', 'wāng']],
+      ['lán', '蓝', ['l', 'an', 'Thanh 2 (ˊ)'], 'Xanh lam (an MŨI TRƯỚC)', ['láng', 'nán', 'lín']],
+      ['láng', '狼', ['l', 'ang', 'Thanh 2 (ˊ)'], 'Chó sói (ang MŨI SAU)', ['lán', 'náng', 'lóng']],
+      ['fēn', '分', ['f', 'en', 'Thanh 1 (ˉ)'], 'Phân chia (en MŨI TRƯỚC)', ['fēng', 'fān', 'bēn']],
+      ['fēng', '风', ['f', 'eng', 'Thanh 1 (ˉ)'], 'Cơn gió (eng MŨI SAU)', ['fēn', 'fāng', 'dēng']],
+      ['xīn', '心', ['x', 'in', 'Thanh 1 (ˉ)'], 'Trái tim (in MŨI TRƯỚC)', ['xīng', 'jīn', 'qīn']],
+      ['xīng', '星', ['x', 'ing', 'Thanh 1 (ˉ)'], 'Ngôi sao (ing MŨI SAU)', ['xīn', 'jīng', 'qīng']],
+      ['jīn', '金', ['j', 'in', 'Thanh 1 (ˉ)'], 'Vàng (in MŨI TRƯỚC)', ['jīng', 'xīn', 'qīn']],
+      ['jīng', '京', ['j', 'ing', 'Thanh 1 (ˉ)'], 'Kinh đô (ing MŨI SAU)', ['jīn', 'xīng', 'qīng']]
+    ]},
+    { id: 20, stage: 2, icon: 'Tổng hợp', label: 'Tổng hợp Ghép vần đơn', items: [
+      ['shuāng', '双', ['sh', 'uang', 'Thanh 1 (ˉ)'], 'Đôi / Cặp (sh + uang · Thanh 1)', ['suāng', 'chuāng', 'zhuāng']],
+      ['guāng', '光', ['g', 'uang', 'Thanh 1 (ˉ)'], 'Ánh sáng (g + uang · Thanh 1)', ['kuāng', 'huāng', 'guān']],
+      ['qiáng', '强', ['q', 'iang', 'Thanh 2 (ˊ)'], 'Mạnh mẽ (q + iang · Thanh 2)', ['jiáng', 'xiáng', 'cháng']],
+      ['xiàng', '象', ['x', 'iang', 'Thanh 4 (ˋ)'], 'Con voi (x + iang · Thanh 4)', ['jiàng', 'qiàng', 'shàng']],
+      ['chuāng', '窗', ['ch', 'uang', 'Thanh 1 (ˉ)'], 'Cửa sổ (ch + uang · Thanh 1)', ['shuāng', 'zhuāng', 'chuán']],
+      ['zhuō', '桌', ['zh', 'uo', 'Thanh 1 (ˉ)'], 'Cái bàn (zh + uo · Thanh 1)', ['zuō', 'chuō', 'shuō']],
+      ['zuǒ', '左', ['z', 'uo', 'Thanh 3 (ˇ)'], 'Bên trái (z thẳng lưỡi + uo · T3)', ['zhuǒ', 'cuǒ', 'suǒ']],
+      ['niú', '牛', ['n', 'iu', 'Thanh 2 (ˊ)'], 'Con bò (n + iu · Thanh 2)', ['liú', 'yóu', 'niǔ']],
+      ['jiǔ', '九', ['j', 'iu', 'Thanh 3 (ˇ)'], 'Số 9 (j + iu · Thanh 3)', ['qiǔ', 'xiǔ', 'liù']],
+      ['qiú', '球', ['q', 'iu', 'Thanh 2 (ˊ)'], 'Quả bóng (q bật hơi + iu · T2)', ['jiú', 'xiú', 'niú']]
+    ]},
+
+    // CHẶNG 3 (ẢI 21 - 30): GHÉP ÂM TỪ ĐÔI & BIẾN ĐIỆU THỰC CHIẾN (100% BẰNG PINYIN)
+    { id: 21, stage: 3, icon: '3 + 3', label: 'Biến điệu hai Thanh 3', items: [
+      ['nǐ hǎo', '你好', ['n', 'ǐ', 'h', 'ǎo'], 'Xin chào (Đọc thành: ní hǎo)', ['nī hǎo', 'nǐ hào', 'lǐ hǎo']],
+      ['hěn hǎo', '很好', ['h', 'ěn', 'h', 'ǎo'], 'Rất tốt (Đọc thành: hén hǎo)', ['hēn hǎo', 'hěn hào', 'kěn hǎo']],
+      ['shuǐ guǒ', '水果', ['sh', 'uǐ', 'g', 'uǒ'], 'Trái cây (Đọc thành: shuí guǒ)', ['suǐ guǒ', 'shuǐ guò', 'shuī guǒ']],
+      ['xiǎo jiě', '小姐', ['x', 'iǎo', 'j', 'iě'], 'Cô / Tiểu thư (Đọc: xiáo jiě)', ['xiǎo qiě', 'shǎo jiě', 'xiào jiě']],
+      ['shǒu biǎo', '手表', ['sh', 'ǒu', 'b', 'iǎo'], 'Đồng hồ đeo tay (Đọc: shóu biǎo)', ['sǒu biǎo', 'shǒu piǎo', 'shòu biǎo']],
+      ['yǔ sǎn', '雨伞', ['y', 'ǔ', 's', 'ǎn'], 'Cái ô (Đọc thành: yú sǎn)', ['yǔ shǎn', 'yú sàn', 'wǔ sǎn']],
+      ['lǎo hǔ', '老虎', ['l', 'ǎo', 'h', 'ǔ'], 'Con hổ (Đọc thành: láo hǔ)', ['nǎo hǔ', 'lǎo kǔ', 'lào hǔ']],
+      ['xǐ liǎn', '洗脸', ['x', 'ǐ', 'l', 'iǎn'], 'Rửa mặt (Đọc thành: xí liǎn)', ['jǐ liǎn', 'xǐ niǎn', 'xì liǎn']],
+      ['kě yǐ', '可以', ['k', 'ě', 'y', 'ǐ'], 'Có thể (Đọc thành: ké yǐ)', ['gě yǐ', 'kě yì', 'hě yǐ']],
+      ['xiǎo gǒu', '小狗', ['x', 'iǎo', 'g', 'ǒu'], 'Chó con (Đọc thành: xiáo gǒu)', ['xiǎo kǒu', 'shǎo gǒu', 'xiào gǒu']]
+    ]},
+    { id: 22, stage: 3, icon: 'Thanh nhẹ', label: 'Quy tắc Thanh nhẹ', items: [
+      ['mā ma', '妈妈', ['m', 'ā', 'm', 'a'], 'Mẹ (Âm sau đọc nhẹ, ngắn)', ['mǎ ma', 'mā mà', 'bà ba']],
+      ['bà ba', '爸爸', ['b', 'à', 'b', 'a'], 'Bố (Thanh 4 + Thanh nhẹ)', ['pà pa', 'bā ba', 'mā ma']],
+      ['gē ge', '哥哥', ['g', 'ē', 'g', 'e'], 'Anh trai (Thanh 1 + Thanh nhẹ)', ['kē ke', 'gè ge', 'dì di']],
+      ['dì di', '弟弟', ['d', 'ì', 'd', 'i'], 'Em trai (Thanh 4 + Thanh nhẹ)', ['tì ti', 'dī di', 'gē ge']],
+      ['jiě jie', '姐姐', ['j', 'iě', 'j', 'ie'], 'Chị gái (Thanh 3 + Thanh nhẹ)', ['qiě qie', 'xiè xie', 'mèi mei']],
+      ['mèi mei', '妹妹', ['m', 'èi', 'm', 'ei'], 'Em gái (Thanh 4 + Thanh nhẹ)', ['měi mei', 'jiě jie', 'nǎi nai']],
+      ['xiè xie', '谢谢', ['x', 'iè', 'x', 'ie'], 'Cảm ơn (Thanh 4 + Thanh nhẹ)', ['jiě jie', 'xiě xie', 'kè qi']],
+      ['kè qi', '客气', ['k', 'è', 'q', 'i'], 'Khách sáo (Thanh 4 + Thanh nhẹ)', ['gè qi', 'kě qi', 'xiè xie']],
+      ['yuè liang', '月亮', ['y', 'uè', 'l', 'iang'], 'Mặt trăng (Thanh 4 + Thanh nhẹ)', ['yè liang', 'yuè niang', 'xīng xing']],
+      ['péng you', '朋友', ['p', 'éng', 'y', 'ou'], 'Bạn bè (Thanh 2 + Thanh nhẹ)', ['béng you', 'péng yǒu', 'wǒ men']]
+    ]},
+    { id: 23, stage: 3, icon: 'yī / bù', label: 'Biến điệu YĪ & BÙ', items: [
+      ['yī tiān', '一天', ['y', 'í', 't', 'iān'], 'Một ngày (Trước Thanh 1, yī đọc thành yí)', ['yì tiān', 'yī diān', 'qī tiān']],
+      ['yī nián', '一年', ['y', 'ì', 'n', 'ián'], 'Một năm (Trước Thanh 2, yī đọc thành yì)', ['yí nián', 'yī lián', 'jīn nián']],
+      ['yī qǐ', '一起', ['y', 'ì', 'q', 'ǐ'], 'Cùng nhau (Trước Thanh 3, yī đọc thành yì)', ['yí qǐ', 'yī jǐ', 'yì xǐ']],
+      ['yī gè', '一个', ['y', 'í', 'g', 'è'], 'Một cái (Trước Thanh 4, yī đọc thành yí)', ['yì gè', 'yī kè', 'zhè gè']],
+      ['dì yī', '第一', ['d', 'ì', 'y', 'ī'], 'Thứ nhất (Đứng cuối giữ nguyên yī T1)', ['tì yī', 'dì yí', 'dì èr']],
+      ['bù hǎo', '不好', ['b', 'ù', 'h', 'ǎo'], 'Không tốt (Trước T3 giữ nguyên bù T4)', ['bú hǎo', 'pù hǎo', 'hěn hǎo']],
+      ['bù chī', '不吃', ['b', 'ù', 'ch', 'ī'], 'Không ăn (Trước T1 giữ nguyên bù T4)', ['bú chī', 'bù cī', 'hǎo chī']],
+      ['bù lái', '不来', ['b', 'ù', 'l', 'ái'], 'Không đến (Trước T2 giữ nguyên bù T4)', ['bú lái', 'bù nái', 'guò lái']],
+      ['bú shì', '不是', ['b', 'ú', 'sh', 'ì'], 'Không phải (Trước T4 đổi thành bú T2)', ['bù shì', 'bú sì', 'jiù shì']],
+      ['bú qù', '不去', ['b', 'ú', 'q', 'ù'], 'Không đi (Trước T4 đổi thành bú T2)', ['bù qù', 'bú jù', 'huí qù']]
+    ]},
+    { id: 24, stage: 3, icon: 'hē shuǐ', label: 'Ghép âm Sinh hoạt', items: [
+      ['hē shuǐ', '喝水', ['h', 'ē', 'sh', 'uǐ'], 'Uống nước', ['kē shuǐ', 'hē suǐ', 'hē chá']],
+      ['hē chá', '喝茶', ['h', 'ē', 'ch', 'á'], 'Uống trà', ['hē cá', 'kē chá', 'hē shuǐ']],
+      ['chī fàn', '吃饭', ['ch', 'ī', 'f', 'àn'], 'Ăn cơm', ['cī fàn', 'chī fàng', 'mǐ fàn']],
+      ['kàn shū', '看书', ['k', 'àn', 'sh', 'ū'], 'Đọc sách', ['gàn shū', 'kàn sū', 'dú shū']],
+      ['xiě zì', '写字', ['x', 'iě', 'z', 'ì'], 'Viết chữ', ['xiě zhì', 'jiě zì', 'hàn zì']],
+      ['shuō huà', '说话', ['sh', 'uō', 'h', 'uà'], 'Nói chuyện', ['suō huà', 'shuō guà', 'diàn huà']],
+      ['shuì jiào', '睡觉', ['sh', 'uì', 'j', 'iào'], 'Đi ngủ', ['suì jiào', 'shuì qiào', 'qǐ chuáng']],
+      ['qǐ chuáng', '起床', ['q', 'ǐ', 'ch', 'uáng'], 'Thức dậy', ['jǐ chuáng', 'qǐ chuán', 'shuì jiào']],
+      ['huí jiā', '回家', ['h', 'uí', 'j', 'iā'], 'Về nhà', ['kuí jiā', 'huí qiā', 'dà jiā']],
+      ['kāi mén', '开门', ['k', 'āi', 'm', 'én'], 'Mở cửa', ['gāi mén', 'kāi méng', 'guān mén']]
+    ]},
+    { id: 25, stage: 3, icon: 'jīn tiān', label: 'Ghép âm Thời gian', items: [
+      ['jīn tiān', '今天', ['j', 'īn', 't', 'iān'], 'Hôm nay', ['qīn tiān', 'jīng tiān', 'míng tiān']],
+      ['míng tiān', '明天', ['m', 'íng', 't', 'iān'], 'Ngày mai', ['mín tiān', 'míng diān', 'jīn tiān']],
+      ['zuó tiān', '昨天', ['z', 'uó', 't', 'iān'], 'Hôm qua', ['zhuó tiān', 'cuó tiān', 'jīn tiān']],
+      ['jīn nián', '今年', ['j', 'īn', 'n', 'ián'], 'Năm nay', ['jīn lián', 'jīng nián', 'míng nián']],
+      ['xīng qī', '星期', ['x', 'īng', 'q', 'ī'], 'Tuần lễ / Thứ', ['xīn qī', 'xīng jī', 'shí jiān']],
+      ['xiàn zài', '现在', ['x', 'iàn', 'z', 'ài'], 'Bây giờ', ['xiàn zhài', 'jiàn zài', 'zài jiàn']],
+      ['shàng wǔ', '上午', ['sh', 'àng', 'w', 'ǔ'], 'Buổi sáng', ['sàng wǔ', 'xià wǔ', 'zhōng wǔ']],
+      ['zhōng wǔ', '中午', ['zh', 'ōng', 'w', 'ǔ'], 'Buổi trưa', ['zōng wǔ', 'chōng wǔ', 'shàng wǔ']],
+      ['xià wǔ', '下午', ['x', 'ià', 'w', 'ǔ'], 'Buổi chiều', ['shà wǔ', 'xià yǔ', 'shàng wǔ']],
+      ['wǎn shang', '晚上', ['w', 'ǎn', 'sh', 'ang'], 'Buổi tối', ['wǎng shang', 'zǎo shang', 'wǎn sang']]
+    ]},
+    { id: 26, stage: 3, icon: 'wǒ men', label: 'Ghép âm Con người', items: [
+      ['wǒ men', '我们', ['w', 'ǒ', 'm', 'en'], 'Chúng tôi', ['nǐ men', 'tā men', 'wǒ méng']],
+      ['nǐ men', '你们', ['n', 'ǐ', 'm', 'en'], 'Các bạn', ['lǐ men', 'wǒ men', 'tā men']],
+      ['tā men', '他们', ['t', 'ā', 'm', 'en'], 'Họ / Bọn họ', ['dā men', 'wǒ men', 'nǐ men']],
+      ['lǎo shī', '老师', ['l', 'ǎo', 'sh', 'ī'], 'Thầy cô giáo', ['nǎo shī', 'lǎo sī', 'xué sheng']],
+      ['xué sheng', '学生', ['x', 'ué', 'sh', 'eng'], 'Học sinh', ['jué sheng', 'xué seng', 'yī shēng']],
+      ['yī shēng', '医生', ['y', 'ī', 'sh', 'ēng'], 'Bác sĩ', ['yī sēng', 'yī shēn', 'xiān sheng']],
+      ['xiān sheng', '先生', ['x', 'iān', 'sh', 'eng'], 'Ông / Ngài', ['jiān sheng', 'xiān seng', 'yī shēng']],
+      ['tóng xué', '同学', ['t', 'óng', 'x', 'ué'], 'Bạn cùng lớp', ['dóng xué', 'tóng jué', 'dà xué']],
+      ['dà jiā', '大家', ['d', 'à', 'j', 'iā'], 'Mọi người', ['tà jiā', 'dà qiā', 'huí jiā']],
+      ['hái zi', '孩子', ['h', 'ái', 'z', 'i'], 'Đứa trẻ', ['kái zi', 'hái zhi', 'ér zi']]
+    ]},
+    { id: 27, stage: 3, icon: 'mǐ fàn', label: 'Ghép âm Ẩm thực', items: [
+      ['mǐ fàn', '米饭', ['m', 'ǐ', 'f', 'àn'], 'Cơm trắng', ['nǐ fàn', 'mǐ fàng', 'chī fàn']],
+      ['miàn tiáo', '面条', ['m', 'iàn', 't', 'iáo'], 'Mì sợi', ['miàn diáo', 'biàn tiáo', 'miàn bāo']],
+      ['miàn bāo', '面包', ['m', 'iàn', 'b', 'āo'], 'Bánh mì', ['miàn pāo', 'miàn tiáo', 'shū bāo']],
+      ['píng guǒ', '苹果', ['p', 'íng', 'g', 'uǒ'], 'Quả táo', ['bíng guǒ', 'pín guǒ', 'shuǐ guǒ']],
+      ['xī guā', '西瓜', ['x', 'ī', 'g', 'uā'], 'Quả dưa hấu', ['jī guā', 'xī kuā', 'huā guǒ']],
+      ['niú nǎi', '牛奶', ['n', 'iú', 'n', 'ǎi'], 'Sữa bò', ['liú nǎi', 'niú lǎi', 'niú ròu']],
+      ['niú ròu', '牛肉', ['n', 'iú', 'r', 'òu'], 'Thịt bò', ['liú ròu', 'niú nǎi', 'yú ròu']],
+      ['jī dàn', '鸡蛋', ['j', 'ī', 'd', 'àn'], 'Trứng gà', ['qī dàn', 'jī tàn', 'cài dān']],
+      ['lǜ chá', '绿茶', ['l', 'ǜ', 'ch', 'á'], 'Trà xanh', ['nǜ chá', 'lǜ cá', 'hē chá']],
+      ['kā fēi', '咖啡', ['k', 'ā', 'f', 'ēi'], 'Cà phê', ['gā fēi', 'kā bēi', 'fēi jī']]
+    ]},
+    { id: 28, stage: 3, icon: 'fēi jī', label: 'Ghép âm Đi lại & Mua sắm', items: [
+      ['fēi jī', '飞机', ['f', 'ēi', 'j', 'ī'], 'Máy bay', ['fēi qī', 'bēi jī', 'shǒu jī']],
+      ['huǒ chē', '火车', ['h', 'uǒ', 'ch', 'ē'], 'Tàu hỏa', ['huǒ cē', 'guǒ chē', 'qì chē']],
+      ['qì chē', '汽车', ['q', 'ì', 'ch', 'ē'], 'Xe ô tô', ['jì chē', 'qì cē', 'huǒ chē']],
+      ['dì tiě', '地铁', ['d', 'ì', 't', 'iě'], 'Tàu điện ngầm', ['tì tiě', 'dì diě', 'dì tú']],
+      ['shāng diàn', '商店', ['sh', 'āng', 'd', 'iàn'], 'Cửa hàng', ['sāng diàn', 'shān diàn', 'fàn diàn']],
+      ['chāo shì', '超市', ['ch', 'āo', 'sh', 'ì'], 'Siêu thị', ['cāo shì', 'chāo sì', 'jiào shì']],
+      ['dōng xi', '东西', ['d', 'ōng', 'x', 'i'], 'Đồ đạc', ['tōng xi', 'dōng jī', 'dōng fāng']],
+      ['pián yi', '便宜', ['p', 'ián', 'y', 'i'], 'Giá rẻ', ['bián yi', 'qián yi', 'róng yì']],
+      ['duō shao', '多少', ['d', 'uō', 'sh', 'ao'], 'Bao nhiêu', ['tuō shao', 'duō sao', 'dà xiǎo']],
+      ['shǒu jī', '手机', ['sh', 'ǒu', 'j', 'ī'], 'Điện thoại di động', ['sǒu jī', 'shǒu qī', 'fēi jī']]
+    ]},
+    { id: 29, stage: 3, icon: 'gāo xìng', label: 'Ghép âm Cảm xúc & Tính chất', items: [
+      ['gāo xìng', '高兴', ['g', 'āo', 'x', 'ìng'], 'Vui mừng', ['kāo xìng', 'gāo xìn', 'hǎo tīng']],
+      ['piào liang', '漂亮', ['p', 'iào', 'l', 'iang'], 'Xinh đẹp', ['biào liang', 'piào niang', 'yuè liang']],
+      ['xǐ huan', '喜欢', ['x', 'ǐ', 'h', 'uan'], 'Yêu thích', ['jǐ huan', 'xǐ guān', 'xí guàn']],
+      ['kuài lè', '快乐', ['k', 'uài', 'l', 'è'], 'Vui vẻ', ['guài lè', 'kuài rè', 'yīn yuè']],
+      ['hǎo chī', '好吃', ['h', 'ǎo', 'ch', 'ī'], 'Ngon (đồ ăn)', ['hǎo cī', 'kǎo chī', 'hǎo hē']],
+      ['hǎo tīng', '好听', ['h', 'ǎo', 't', 'īng'], 'Êm tai / Hay', ['hǎo dīng', 'hǎo tīn', 'gāo xìng']],
+      ['róng yì', '容易', ['r', 'óng', 'y', 'ì'], 'Dễ dàng', ['lóng yì', 'róng yī', 'pián yi']],
+      ['zhòng yào', '重要', ['zh', 'òng', 'y', 'ào'], 'Quan trọng', ['zòng yào', 'chòng yào', 'xū yào']],
+      ['ān jìng', '安静', ['ā', 'n', 'j', 'ìng'], 'Yên tĩnh', ['āng jìng', 'ān qìng', 'gān jìng']],
+      ['gān jìng', '干净', ['g', 'ān', 'j', 'ìng'], 'Sạch sẽ', ['kān jìng', 'gān jìn', 'ān jìng']]
+    ]},
+    { id: 30, stage: 3, icon: 'zài jiàn', label: 'Ghép âm Giao tiếp Thực chiến', items: [
+      ['zài jiàn', '再见', ['z', 'ài', 'j', 'iàn'], 'Tạm biệt', ['zhài jiàn', 'cài jiàn', 'xiàn zài']],
+      ['qǐng wèn', '请问', ['q', 'ǐng', 'w', 'èn'], 'Xin hỏi', ['jǐng wèn', 'qǐn wèn', 'qǐng jìn']],
+      ['qǐng jìn', '请进', ['q', 'ǐng', 'j', 'ìn'], 'Mời vào', ['qǐng qìn', 'jǐng jìn', 'qǐng wèn']],
+      ['qǐng zuò', '请坐', ['q', 'ǐng', 'z', 'uò'], 'Mời ngồi', ['qǐng zhuò', 'qǐng cuò', 'qǐng wèn']],
+      ['huān yíng', '欢迎', ['h', 'uān', 'y', 'íng'], 'Hoan nghênh / Chào mừng', ['guān yíng', 'huān yín', 'gāo xìng']],
+      ['yuè nán', '越南', ['y', 'uè', 'n', 'án'], 'Việt Nam', ['yè nán', 'yuè lán', 'yún nán']],
+      ['hàn yǔ', '汉语', ['h', 'àn', 'y', 'ǔ'], 'Tiếng Trung (Hán ngữ)', ['kàn yǔ', 'hàng yǔ', 'yīng yǔ']],
+      ['zhōng guó', '中国', ['zh', 'ōng', 'g', 'uó'], 'Trung Quốc', ['zōng guó', 'chōng guó', 'měi guó']],
+      ['jiā yóu', '加油', ['j', 'iā', 'y', 'óu'], 'Cố lên!', ['qiā yóu', 'jiā liú', 'péng you']],
+      ['chéng gōng', '成功', ['ch', 'éng', 'g', 'ōng'], 'Thành công', ['céng gōng', 'chéng kōng', 'zhōng guó']]
+    ]}
+  ];
+
+  // Chuẩn hóa danh sách 30 Ải
+  const LEVELS = RAW_30_LEVELS.map(lv => ({
+    id: lv.id,
+    stage: lv.stage,
+    icon: lv.icon,
+    label: lv.label,
+    items: lv.items.map(arr => ({
+      py: arr[0],
+      tts: arr[1],
+      parts: arr[2],
+      desc: arr[3],
+      distractors: arr[4]
+    }))
+  }));
+
+  // =========================================================================
+  // 3. TRẠNG THÁI ỨNG DỤNG & LƯU TRỮ TIẾN ĐỘ
+  // =========================================================================
+  let leftTabMode = 'initials'; // 'initials' | 'finals'
+  let selectedRightItem = {
+    sym: 'bā',
+    tts: '八',
+    read: 'Đọc như "pa" nhẹ (Thanh 1 cao ngang)',
+    formula: 'b + a + Thanh 1 (ˉ)',
+    note: 'Thanh mẫu b là âm hai môi KHÔNG bật hơi (đọc gần giống chữ p nhẹ tiếng Việt), ghép với vận mẫu a mở rộng miệng và giữ giọng cao ngang đều ở Thanh 1 (ˉ).'
+  };
+
+  let centerMode = 'map'; // 'map' | 'lesson'
+  let currentLevelId = 1;
+  let currentStarStep = 1; // 1 | 2 | 3
+  let unlockAll = false;
+  let lastMapScrollTop = 0;
+
+  let progress = {};
+  LEVELS.forEach(lv => { progress[lv.id] = [false, false, false]; });
+
+  function loadSavedProgress() {
+    try {
+      const raw = localStorage.getItem('pinyin_30_progress_v2');
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        LEVELS.forEach(lv => {
+          if (Array.isArray(parsed[lv.id])) progress[lv.id] = parsed[lv.id];
+        });
+      }
+    } catch (e) {}
+  }
+
+  function saveProgress() {
+    try {
+      localStorage.setItem('pinyin_30_progress_v2', JSON.stringify(progress));
+    } catch (e) {}
+    updateTotalStarsUI();
+  }
+
+  function updateTotalStarsUI() {
+    let total = 0;
+    Object.values(progress).forEach(arr => arr.forEach(v => { if (v) total++; }));
+    const badge = document.getElementById('total-stars-badge');
+    if (badge) badge.textContent = `⭐ ${total}/90`;
+  }
+
+  function isLevelUnlocked(lvId) {
+    if (unlockAll || lvId === 1) return true;
+    const prev = progress[lvId - 1];
+    return prev && prev[0] && prev[1] && prev[2];
+  }
+
+  function shuffleArray(arr) {
+    const copy = [...arr];
+    for (let i = copy.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [copy[i], copy[j]] = [copy[j], copy[i]];
+    }
+    return copy;
+  }
+
+  // =========================================================================
+  // 4. PHÁT ÂM TIẾNG TRUNG QUAN THOẠI CHUẨN (ZH-CN)
+  // =========================================================================
+  function speakZh(text, rate = 0.85) {
+    if (!text) return;
+    try {
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        const utter = new SpeechSynthesisUtterance(text);
+        utter.lang = 'zh-CN';
+        utter.rate = rate;
+        const voices = window.speechSynthesis.getVoices();
+        const zhVoice = voices.find(v => v.lang && (v.lang.toLowerCase().includes('zh') || v.lang.toLowerCase().includes('cmn')));
+        if (zhVoice) utter.voice = zhVoice;
+        window.speechSynthesis.speak(utter);
+      }
+    } catch (e) {}
+  }
+
+  function speakSelectedRight() {
+    speakZh(selectedRightItem.tts, 0.85);
+  }
+
+  // =========================================================================
+  // 5. CỘT TRÁI & CỘT PHẢI (BẢNG CHỮ CÁI PINYIN)
+  // =========================================================================
+  function switchLeftTab(mode) {
+    leftTabMode = mode;
+    document.getElementById('tab-initials').classList.toggle('active', mode === 'initials');
+    document.getElementById('tab-finals').classList.toggle('active', mode === 'finals');
+    renderLeftColumn();
+  }
+
+  function renderLeftColumn() {
+    const container = document.getElementById('left-body-content');
+    if (!container) return;
+
+    const sourceList = leftTabMode === 'initials' ? INITIALS_CHART : FINALS_CHART;
+    const titleCap = leftTabMode === 'initials'
+      ? 'BẢNG 23 THANH MẪU (PHỤ ÂM ĐẦU)'
+      : 'BẢNG 36 VẬN MẪU (VẦN) & 4 DẤU';
+
+    let html = `
+      <div class="section-caption">${titleCap}</div>
+      <div class="section-desc">Bấm vào từng chữ cái Pinyin để nghe âm mẫu & xem khẩu hình bên phải.</div>
+    `;
+
+    sourceList.forEach(grp => {
+      html += `<div class="group-header">${grp.group}</div><div class="alpha-grid">`;
+      grp.items.forEach(item => {
+        const active = selectedRightItem.sym === item.sample && selectedRightItem.formula === item.formula;
+        html += `
+          <div class="alpha-cell ${active ? 'active' : ''}" onclick='selectLeftChartItem(${JSON.stringify(item)})'>
+            <div class="k-char">${item.sym}</div>
+            <div class="k-romaji">Mẫu: ${item.sample}</div>
+          </div>
+        `;
+      });
+      html += `</div>`;
+    });
+
+    container.innerHTML = html;
+  }
+
+  function selectLeftChartItem(item) {
+    selectedRightItem = {
+      sym: item.sample,
+      tts: item.tts,
+      read: item.read,
+      formula: item.formula,
+      note: item.note
+    };
+    renderLeftColumn();
+    renderRightCard();
+    speakZh(item.tts, 0.85);
+  }
+
+  function renderRightCard() {
+    document.getElementById('right-main-sym').textContent = selectedRightItem.sym;
+    document.getElementById('right-read-guide').textContent = selectedRightItem.read;
+    document.getElementById('right-meaning').textContent = selectedRightItem.formula;
+    document.getElementById('note-formula').textContent = selectedRightItem.formula;
+    document.getElementById('note-body').textContent = selectedRightItem.note;
+  }
+
+  // =========================================================================
+  // 6. CỘT GIỮA: BẢN ĐỒ CHỮ CÁI (CANDY SAGA 30 ẢI)
+  // =========================================================================
+  function renderCenter() {
+    const layout = document.getElementById('app-layout');
+    if (centerMode === 'lesson') {
+      layout.classList.add('lesson-fullscreen');
+      renderLessonScreen();
+    } else {
+      layout.classList.remove('lesson-fullscreen');
+      renderSagaMap();
+    }
+  }
+
+  function renderSagaMap() {
+    const header = document.getElementById('center-header');
+    const scrollBox = document.getElementById('center-scroll');
+
+    header.innerHTML = `
+      <div class="map-title-badge">🗺️ Bản đồ chữ cái</div>
+      <button class="btn-outline" onclick="toggleUnlockAll()">
+        ${unlockAll ? '🔒 Đang mở thử 30 ải' : '🔓 Mở khóa thử tất cả ải'}
+      </button>
+    `;
+
+    const positions = ['pos-center', 'pos-right', 'pos-center', 'pos-left'];
+    let html = `<div class="saga-container">`;
+
+    LEVELS.forEach((lv, index) => {
+      if (lv.id === 1) {
+        html += `<div class="stage-banner"><span>Chặng 1: Nguyên Âm, 4 Thanh Điệu & 23 Thanh Mẫu (Ải 1 – 10)</span></div>`;
+      } else if (lv.id === 11) {
+        html += `<div class="stage-banner"><span>Chặng 2: Vận Mẫu Kép & Vận Mẫu Mũi (Ải 11 – 20)</span></div>`;
+      } else if (lv.id === 21) {
+        html += `<div class="stage-banner"><span>Chặng 3: Ghép Âm Từ Đôi & Biến Điệu Pinyin (Ải 21 – 30)</span></div>`;
+      }
+
+      const unlocked = isLevelUnlocked(lv.id);
+      const stars = progress[lv.id] || [false, false, false];
+      const posClass = positions[index % positions.length];
+
+      const starIcons = [0, 1, 2].map(i =>
+        `<span class="${stars[i] ? 'star-on' : 'star-off'}">★</span>`
+      ).join('');
+
+      html += `
+        <div class="saga-row ${posClass}" id="map-node-${lv.id}">
+          <div class="level-node-wrap" onclick="enterLevel(${lv.id})">
+            <div class="level-circle ${unlocked ? '' : 'locked'}">
+              <div class="level-num">LEVEL ${lv.id}</div>
+              <div class="level-kana">${lv.icon}</div>
+              <div class="level-sub">${lv.label}</div>
+            </div>
+            <div class="level-stars">${starIcons}</div>
+          </div>
+        </div>
+      `;
+    });
+
+    html += `</div>`;
+    scrollBox.innerHTML = html;
+
+    requestAnimationFrame(() => {
+      const targetNode = document.getElementById(`map-node-${currentLevelId}`);
+      if (targetNode && currentLevelId > 1) {
+        targetNode.scrollIntoView({ block: 'center', behavior: 'instant' });
+      } else {
+        scrollBox.scrollTop = lastMapScrollTop;
+      }
+    });
+  }
+
+  function toggleUnlockAll() {
+    const scrollBox = document.getElementById('center-scroll');
+    if (scrollBox) lastMapScrollTop = scrollBox.scrollTop;
+    unlockAll = !unlockAll;
+    renderSagaMap();
+  }
+
+  // =========================================================================
+  // 7. LOGIC 3 NHIỆM VỤ 100% PINYIN & PHÁT ÂM (KHÔNG CẦN BIẾT CHỮ HÁN)
+  // ⭐ 1: Ghép chữ Pinyin | ⭐ 2: Nghe phân biệt từ | ⭐ 3: Nghe chép lại từ
+  // =========================================================================
+  let s1Queue = [];
+  let s1TargetIdx = 0;
+  let s1Slots = [];
+  let s1Pool = [];
+
+  let s2Queue = [];
+  let s2TargetIdx = 0;
+  let s2Choices = [];
+
+  let s3Queue = [];
+  let s3TargetIdx = 0;
+  let s3Slots = [];
+  let s3Pool = [];
+
+  function enterLevel(lvId) {
+    if (!isLevelUnlocked(lvId)) {
+      alert('Hãy hoàn thành đủ 3 Sao ⭐⭐⭐ ở ải trước (hoặc bấm "Mở khóa thử tất cả ải") nhé!');
+      return;
+    }
+    const scrollBox = document.getElementById('center-scroll');
+    if (scrollBox) lastMapScrollTop = scrollBox.scrollTop;
+
+    currentLevelId = lvId;
+    const stars = progress[lvId];
+    if (!stars[0]) currentStarStep = 1;
+    else if (!stars[1]) currentStarStep = 2;
+    else if (!stars[2]) currentStarStep = 3;
+    else currentStarStep = 1;
+
+    initLessonData(lvId);
+    centerMode = 'lesson';
+    renderCenter();
+    if (currentStarStep === 1 && s1Queue[0]) {
+      setTimeout(() => speakZh(s1Queue[0].tts, 0.85), 200);
+    }
+  }
+
+  function backToMap() {
+    centerMode = 'map';
+    renderCenter();
+  }
+
+  function reshuffleCurrentLevel() {
+    initLessonData(currentLevelId);
+    renderLessonScreen();
+  }
+
+  function switchStarTab(step) {
+    currentStarStep = step;
+    renderLessonScreen();
+    if (step === 1 && s1Queue[s1TargetIdx]) {
+      setTimeout(() => speakZh(s1Queue[s1TargetIdx].tts, 0.85), 180);
+    } else if (step === 2 && s2Queue[s2TargetIdx]) {
+      setTimeout(() => speakZh(s2Queue[s2TargetIdx].tts, 0.85), 180);
+    } else if (step === 3 && s3Queue[s3TargetIdx]) {
+      setTimeout(() => speakZh(s3Queue[s3TargetIdx].tts, 0.85), 180);
+    }
+  }
+
+  function initLessonData(lvId) {
+    const lv = LEVELS.find(x => x.id === lvId);
+
+    // --- Sao 1: Ghép chữ Pinyin (Thanh mẫu + Vận mẫu + Thanh điệu) ---
+    s1Queue = shuffleArray(lv.items);
+    s1TargetIdx = 0;
+    setupStar1CurrentQuestion(lv);
+
+    // --- Sao 2: Nghe phân biệt âm / từ Pinyin ---
+    s2Queue = shuffleArray(lv.items);
+    s2TargetIdx = 0;
+    setupStar2CurrentQuestion();
+
+    // --- Sao 3: Nghe chép lại Pinyin ---
+    s3Queue = shuffleArray(lv.items);
+    s3TargetIdx = 0;
+    setupStar3CurrentQuestion(lv);
+  }
+
+  function setupStar1CurrentQuestion(lv) {
+    const item = s1Queue[s1TargetIdx];
+    if (!item) return;
+    s1Slots = item.parts.map(() => null);
+
+    // Khay chọn gồm đúng các mảnh của âm hiện tại + các mảnh khác trong ải
+    const poolPieces = [...item.parts];
+    const allLevelPieces = [];
+    lv.items.forEach(it => it.parts.forEach(p => allLevelPieces.push(p)));
+
+    shuffleArray(allLevelPieces).forEach(p => {
+      if (poolPieces.length < item.parts.length + 5 && !poolPieces.includes(p)) {
+        poolPieces.push(p);
+      }
+    });
+
+    s1Pool = shuffleArray(poolPieces).map((ch, idx) => ({ id: idx, ch, used: false }));
+  }
+
+  function setupStar2CurrentQuestion() {
+    const target = s2Queue[s2TargetIdx];
+    if (!target) return;
+
+    // 4 phương án Pinyin: 1 đáp án đúng + 3 âm dễ nhầm lẫn (b/p, d/t, z/zh, an/ang, 4 dấu)
+    const opts = [
+      { py: target.py, isCorrect: true, tag: 'Bấm chọn âm này' },
+      ...target.distractors.map(d => ({ py: d, isCorrect: false, tag: 'Bấm chọn âm này' }))
+    ];
+    s2Choices = shuffleArray(opts);
+  }
+
+  function setupStar3CurrentQuestion(lv) {
+    const item = s3Queue[s3TargetIdx];
+    if (!item) return;
+    s3Slots = item.parts.map(() => null);
+
+    // Khay chép Pinyin gồm các mảnh đúng + các thanh điệu và thanh mẫu/vận mẫu gây nhiễu
+    const poolPieces = [...item.parts];
+    const allTones = ['Thanh 1 (ˉ)', 'Thanh 2 (ˊ)', 'Thanh 3 (ˇ)', 'Thanh 4 (ˋ)'];
+    if (lv.stage <= 2) {
+      allTones.forEach(t => {
+        if (!poolPieces.includes(t)) poolPieces.push(t);
+      });
+    }
+
+    const allLevelPieces = [];
+    lv.items.forEach(it => it.parts.forEach(p => allLevelPieces.push(p)));
+    shuffleArray(allLevelPieces).forEach(p => {
+      if (poolPieces.length < item.parts.length + 6 && !poolPieces.includes(p)) {
+        poolPieces.push(p);
+      }
+    });
+
+    s3Pool = shuffleArray(poolPieces).map((ch, idx) => ({ id: idx, ch, used: false }));
+  }
+
+  // =========================================================================
+  // 8. VẼ GIAO DIỆN BÀI HỌC & CẬP NHẬT DOM TỪNG PHẦN (KHÔNG NHÁY MÀN HÌNH)
+  // =========================================================================
+  function renderLessonScreen() {
+    const lv = LEVELS.find(x => x.id === currentLevelId);
+    const stars = progress[currentLevelId];
+    const header = document.getElementById('center-header');
+    const scrollBox = document.getElementById('center-scroll');
+
+    header.innerHTML = `
+      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+        <button class="btn-outline" onclick="backToMap()">← Bản đồ</button>
+        <div class="map-title-badge">Ải ${lv.id}: ${lv.icon} (${lv.label})</div>
+        <button class="btn-outline" onclick="reshuffleCurrentLevel()">🔀 Xáo trộn lại</button>
+      </div>
+      <div class="star-nav-group">
+        <button class="star-tab-btn ${currentStarStep === 1 ? 'active' : (stars[0] ? 'done-star' : '')}" onclick="switchStarTab(1)">
+          ⭐ 1: Ghép chữ
+        </button>
+        <button class="star-tab-btn ${currentStarStep === 2 ? 'active' : (stars[1] ? 'done-star' : '')}" onclick="switchStarTab(2)">
+          ⭐ 2: Nghe phân biệt từ
+        </button>
+        <button class="star-tab-btn ${currentStarStep === 3 ? 'active' : (stars[2] ? 'done-star' : '')}" onclick="switchStarTab(3)">
+          ⭐ 3: Nghe chép lại từ
+        </button>
+      </div>
+    `;
+
+    if (currentStarStep === 1) renderStar1Body(scrollBox);
+    else if (currentStarStep === 2) renderStar2Body(scrollBox);
+    else renderStar3Body(scrollBox);
+  }
+
+  // Lưới 10 mục hiển thị tiến độ từ #1 -> #10
+  function build10ItemsProgressGrid(queue, currentIdx, hidePendingPinyin = false) {
+    return queue.map((it, idx) => {
+      const isDone = idx < currentIdx;
+      const isCurrent = idx === currentIdx;
+      const cardCls = isDone
+        ? 'word-item-card completed-word'
+        : (isCurrent ? 'word-item-card current-word' : 'word-item-card');
+
+      let badgeHtml = '';
+      if (isDone) {
+        badgeHtml = `<span class="word-status-badge" style="background:#042f2e;color:#fde047;">${it.py} (${it.parts.join(' + ')}) ★ Đã xong</span>`;
+      } else if (isCurrent) {
+        badgeHtml = `<span class="word-status-badge" style="background:#0d9488;color:#fff;">Đang làm</span>`;
+      } else {
+        badgeHtml = `<span class="word-status-badge" style="color:#94a3b8;">Chờ lượt</span>`;
+      }
+
+      const titleText = isDone || !hidePendingPinyin
+        ? `#${idx + 1} ${it.py}`
+        : `#${idx + 1} 🎧 Âm nghe số ${idx + 1}`;
+
+      const subText = isDone || !hidePendingPinyin
+        ? it.desc
+        : `Nghe phát âm để hoàn thành câu #${idx + 1}`;
+
+      return `
+        <div class="${cardCls}">
+          <div>
+            <div class="word-romaji-title">${titleText}</div>
+            <div class="word-meaning-sub">${subText}</div>
+          </div>
+          ${badgeHtml}
+        </div>
+      `;
+    }).join('');
+  }
+
+  // ------------------- SAO 1: GHÉP CHỮ PINYIN (THANH MẪU + VẬN MẪU + DẤU) -------------------
+  function renderStar1Body(container) {
+    const item = s1Queue[s1TargetIdx];
+    const cardsHtml = build10ItemsProgressGrid(s1Queue, s1TargetIdx, false);
+
+    container.innerHTML = `
+      <div class="lesson-wrapper">
+        <div class="task-banner">
+          <div>
+            <div class="task-banner-title">
+              NHIỆM VỤ SAO 1 ⭐ — GHÉP CHỮ CÁI PINYIN: THANH MẪU + VẬN MẪU + THANH ĐIỆU (${s1TargetIdx + 1}/${s1Queue.length})
+            </div>
+            <div class="task-banner-sub">Bấm chọn từng thành phần bên dưới để ghép thành âm Pinyin đang chỉ định. Bấm vào ô trên để trả chữ về!</div>
+          </div>
+          <div class="badge-progress">${s1TargetIdx} / ${s1Queue.length} âm</div>
+        </div>
+
+        <div class="prompt-box">
+          <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;">
+            <div>
+              <div style="font-size:11px;font-weight:800;color:#0f766e;">
+                ÂM SỐ #${s1TargetIdx + 1}/${s1Queue.length} CẦN GHÉP:
+              </div>
+              <div style="margin-top:2px;">
+                <span style="font-size:36px;font-weight:900;color:#0f172a;">${item.py}</span>
+                <span style="font-size:15.5px;font-weight:700;color:#0f766e;margin-left:10px;">— ${item.desc}</span>
+              </div>
+            </div>
+            <button class="btn-outline" onclick="speakZh(s1Queue[s1TargetIdx].tts, 0.85)">🔊 Nghe phát âm</button>
+          </div>
+          <div class="slots-row" id="s1-slots-row"></div>
+        </div>
+
+        <div class="pool-row" id="s1-pool-row"></div>
+
+        <div class="words-grid-10">${cardsHtml}</div>
+      </div>
+    `;
+
+    updateStar1InteractiveDOM();
+  }
+
+  function updateStar1InteractiveDOM() {
+    const slotsRow = document.getElementById('s1-slots-row');
+    const poolRow = document.getElementById('s1-pool-row');
+    if (!slotsRow || !poolRow) return;
+
+    slotsRow.innerHTML = s1Slots.map((slotObj, sIdx) => {
+      const plus = sIdx < s1Slots.length - 1 ? `<span style="font-weight:900;color:#94a3b8;">+</span>` : '';
+      if (slotObj) {
+        return `<button class="answer-slot filled" onclick="removeStar1Slot(${sIdx})">${slotObj.ch}</button>${plus}`;
+      }
+      return `<div class="answer-slot">?</div>${plus}`;
+    }).join('');
+
+    poolRow.innerHTML = s1Pool.map((pObj, pIdx) => `
+      <button class="pool-btn ${pObj.used ? 'used-hidden' : ''}" onclick="pickStar1Pool(${pIdx})">
+        ${pObj.ch}
+      </button>
+    `).join('');
+  }
+
+  function pickStar1Pool(pIdx) {
+    const piece = s1Pool[pIdx];
+    if (!piece || piece.used) return;
+    const emptyIdx = s1Slots.findIndex(x => x === null);
+    if (emptyIdx === -1) return;
+
+    piece.used = true;
+    s1Slots[emptyIdx] = piece;
+    updateStar1InteractiveDOM();
+
+    if (s1Slots.every(x => x !== null)) {
+      const target = s1Queue[s1TargetIdx];
+      const isMatch = s1Slots.every((s, idx) => s.ch === target.parts[idx]);
+      if (isMatch) {
+        speakZh(target.tts, 0.85);
+        const lv = LEVELS.find(x => x.id === currentLevelId);
+        setTimeout(() => {
+          if (s1TargetIdx + 1 < s1Queue.length) {
+            s1TargetIdx++;
+            setupStar1CurrentQuestion(lv);
+            renderStar1Body(document.getElementById('center-scroll'));
+            speakZh(s1Queue[s1TargetIdx].tts, 0.85);
+          } else {
+            progress[currentLevelId][0] = true;
+            saveProgress();
+            currentStarStep = 2;
+            renderLessonScreen();
+            setTimeout(() => speakZh(s2Queue[s2TargetIdx].tts, 0.85), 200);
+          }
+        }, 460);
+      }
+    }
+  }
+
+  function removeStar1Slot(sIdx) {
+    const slotObj = s1Slots[sIdx];
+    if (!slotObj) return;
+    slotObj.used = false;
+    s1Slots[sIdx] = null;
+    updateStar1InteractiveDOM();
+  }
+
+  // ------------------- SAO 2: NGHE PHÂN BIỆT TỪ / ÂM PINYIN -------------------
+  function renderStar2Body(container) {
+    const cardsHtml = build10ItemsProgressGrid(s2Queue, s2TargetIdx, true);
+
+    const choicesHtml = s2Choices.map((opt, cIdx) => `
+      <div class="listen-choice-card" id="s2-choice-${cIdx}" onclick="pickStar2Choice(${cIdx})">
+        <div class="listen-choice-pinyin">${opt.py}</div>
+        <div class="listen-choice-tag">${opt.tag}</div>
+      </div>
+    `).join('');
+
+    container.innerHTML = `
+      <div class="lesson-wrapper">
+        <div class="task-banner">
+          <div>
+            <div class="task-banner-title">
+              NHIỆM VỤ SAO 2 ⭐ — NGHE PHÂN BIỆT PHÁT ÂM & THANH ĐIỆU PINYIN (${s2TargetIdx + 1}/${s2Queue.length})
+            </div>
+            <div class="task-banner-sub">Nghe kỹ âm thanh (chú ý bật hơi, thẳng/cong lưỡi và thanh điệu) rồi chọn đúng phiên âm Pinyin!</div>
+          </div>
+          <div class="badge-progress">${s2TargetIdx} / ${s2Queue.length} câu</div>
+        </div>
+
+        <div class="prompt-box" style="justify-content:space-between;">
+          <div>
+            <div style="font-size:11px;font-weight:800;color:#0f766e;">
+              CÂU NGHE SỐ #${s2TargetIdx + 1}/${s2Queue.length}:
+            </div>
+            <div style="font-size:20px;font-weight:900;color:#0f172a;margin-top:4px;">
+              🎧 Bấm nghe và phân biệt trong 4 phiên âm Pinyin dưới đây
+            </div>
+          </div>
+          <div style="display:flex;gap:8px;">
+            <button class="btn-listen" style="margin-top:0;width:auto;padding:10px 18px;" onclick="speakZh(s2Queue[s2TargetIdx].tts, 0.85)">
+              🔊 Nghe chuẩn
+            </button>
+            <button class="btn-outline" onclick="speakZh(s2Queue[s2TargetIdx].tts, 0.55)">
+              🐢 Nghe chậm
+            </button>
+          </div>
+        </div>
+
+        <div class="listen-choices-grid">${choicesHtml}</div>
+
+        <div class="words-grid-10">${cardsHtml}</div>
+      </div>
+    `;
+  }
+
+  function pickStar2Choice(cIdx) {
+    const chosen = s2Choices[cIdx];
+    const target = s2Queue[s2TargetIdx];
+    if (!chosen || !target) return;
+
+    const cardEl = document.getElementById(`s2-choice-${cIdx}`);
+    if (chosen.isCorrect) {
+      speakZh(target.tts, 0.85);
+      setTimeout(() => {
+        if (s2TargetIdx + 1 < s2Queue.length) {
+          s2TargetIdx++;
+          setupStar2CurrentQuestion();
+          renderStar2Body(document.getElementById('center-scroll'));
+          speakZh(s2Queue[s2TargetIdx].tts, 0.85);
+        } else {
+          progress[currentLevelId][1] = true;
+          saveProgress();
+          currentStarStep = 3;
+          renderLessonScreen();
+          setTimeout(() => speakZh(s3Queue[s3TargetIdx].tts, 0.85), 200);
+        }
+      }, 450);
+    } else {
+      if (cardEl) {
+        cardEl.classList.add('wrong-shake');
+        setTimeout(() => cardEl.classList.remove('wrong-shake'), 300);
+      }
+      speakZh(target.tts, 0.7);
+    }
+  }
+
+  // ------------------- SAO 3: NGHE CHÉP LẠI TỪ BẰNG PINYIN -------------------
+  function renderStar3Body(container) {
+    const item = s3Queue[s3TargetIdx];
+    const cardsHtml = build10ItemsProgressGrid(s3Queue, s3TargetIdx, true);
+
+    container.innerHTML = `
+      <div class="lesson-wrapper">
+        <div class="task-banner">
+          <div>
+            <div class="task-banner-title">
+              NHIỆM VỤ SAO 3 ⭐ — NGHE CHÉP LẠI TỪ BẰNG PINYIN (${s3TargetIdx + 1}/${s3Queue.length})
+            </div>
+            <div class="task-banner-sub">Chỉ nghe âm thanh (ẩn chữ Pinyin), tự nhận diện Thanh mẫu + Vận mẫu + Thanh điệu để chép lại!</div>
+          </div>
+          <div class="badge-progress">${s3TargetIdx} / ${s3Queue.length} câu</div>
+        </div>
+
+        <div class="prompt-box">
+          <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+            <div>
+              <div style="font-size:11px;font-weight:800;color:#0f766e;">
+                NGHE CHÉP ÂM SỐ #${s3TargetIdx + 1}/${s3Queue.length}:
+              </div>
+              <div style="font-size:18px;font-weight:900;margin-top:3px;">
+                🎧 Nghe và chép lại Pinyin — Gợi ý: <span style="color:#0d9488;">${item.desc.split('(')[0]}</span>
+              </div>
+            </div>
+            <button class="btn-listen" style="margin-top:0;width:auto;padding:9px 16px;" onclick="speakZh(s3Queue[s3TargetIdx].tts, 0.85)">
+              🔊 Nghe âm
+            </button>
+            <button class="btn-outline" onclick="speakZh(s3Queue[s3TargetIdx].tts, 0.55)">
+              🐢 Nghe chậm
+            </button>
+          </div>
+
+          <div class="slots-row" id="s3-slots-row"></div>
+        </div>
+
+        <div class="pool-row" id="s3-pool-row"></div>
+
+        <div class="words-grid-10">${cardsHtml}</div>
+      </div>
+    `;
+
+    updateStar3InteractiveDOM();
+  }
+
+  function updateStar3InteractiveDOM() {
+    const slotsRow = document.getElementById('s3-slots-row');
+    const poolRow = document.getElementById('s3-pool-row');
+    if (!slotsRow || !poolRow) return;
+
+    slotsRow.innerHTML = s3Slots.map((slotObj, sIdx) => {
+      const plus = sIdx < s3Slots.length - 1 ? `<span style="font-weight:900;color:#94a3b8;">+</span>` : '';
+      if (slotObj) {
+        return `<button class="answer-slot filled" onclick="removeStar3Slot(${sIdx})">${slotObj.ch}</button>${plus}`;
+      }
+      return `<div class="answer-slot">?</div>${plus}`;
+    }).join('');
+
+    poolRow.innerHTML = s3Pool.map((pObj, pIdx) => `
+      <button class="pool-btn ${pObj.used ? 'used-hidden' : ''}" onclick="pickStar3Pool(${pIdx})">
+        ${pObj.ch}
+      </button>
+    `).join('');
+  }
+
+  function pickStar3Pool(pIdx) {
+    const piece = s3Pool[pIdx];
+    if (!piece || piece.used) return;
+    const emptyIdx = s3Slots.findIndex(x => x === null);
+    if (emptyIdx === -1) return;
+
+    piece.used = true;
+    s3Slots[emptyIdx] = piece;
+    updateStar3InteractiveDOM();
+
+    if (s3Slots.every(x => x !== null)) {
+      const target = s3Queue[s3TargetIdx];
+      const isMatch = s3Slots.every((s, idx) => s.ch === target.parts[idx]);
+      if (isMatch) {
+        speakZh(target.tts, 0.85);
+        const lv = LEVELS.find(x => x.id === currentLevelId);
+        setTimeout(() => {
+          if (s3TargetIdx + 1 < s3Queue.length) {
+            s3TargetIdx++;
+            setupStar3CurrentQuestion(lv);
+            renderStar3Body(document.getElementById('center-scroll'));
+            speakZh(s3Queue[s3TargetIdx].tts, 0.85);
+          } else {
+            // Đạt đủ 3 Sao -> Tự động quay ra Bản đồ chữ cái ngay tại ải vừa qua
+            progress[currentLevelId][2] = true;
+            saveProgress();
+            centerMode = 'map';
+            renderCenter();
+          }
+        }, 480);
+      }
+    }
+  }
+
+  function removeStar3Slot(sIdx) {
+    const slotObj = s3Slots[sIdx];
+    if (!slotObj) return;
+    slotObj.used = false;
+    s3Slots[sIdx] = null;
+    updateStar3InteractiveDOM();
+  }
+
+  // =========================================================================
+  // 9. MÃ CHUYỂN MÁY (ĐỒNG BỘ TIẾN ĐỘ)
+  // =========================================================================
+  function openSyncModal() {
+    const encoded = 'PYN-' + btoa(encodeURIComponent(JSON.stringify(progress)));
+    document.getElementById('export-code-box').value = encoded;
+    document.getElementById('sync-modal').classList.add('open');
+  }
+
+  function closeSyncModal() {
+    document.getElementById('sync-modal').classList.remove('open');
+  }
+
+  function copySyncCode() {
+    const box = document.getElementById('export-code-box');
+    box.select();
+    document.execCommand('copy');
+    alert('Đã copy Mã tiến độ Pinyin!');
+  }
+
+  function applySyncCode() {
+    const raw = document.getElementById('import-code-box').value.trim();
+    if (!raw.startsWith('PYN-')) {
+      alert('Mã không hợp lệ (phải bắt đầu bằng PYN-)!');
+      return;
+    }
+    try {
+      const parsed = JSON.parse(decodeURIComponent(atob(raw.slice(4))));
+      LEVELS.forEach(lv => {
+        if (Array.isArray(parsed[lv.id])) progress[lv.id] = parsed[lv.id];
+      });
+      saveProgress();
+      closeSyncModal();
+      renderCenter();
+      alert('Đã nạp tiến độ thành công!');
+    } catch (e) {
+      alert('Không thể đọc mã tiến độ, vui lòng kiểm tra lại!');
+    }
+  }
+
+  // Khởi chạy ứng dụng
+  loadSavedProgress();
+  updateTotalStarsUI();
+  renderLeftColumn();
+  renderRightCard();
+  renderCenter();
+</script>
+</body>
+</html>
